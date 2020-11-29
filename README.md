@@ -1,1 +1,1 @@
-# COVID-19-Analytics
+# Hackathon readme
