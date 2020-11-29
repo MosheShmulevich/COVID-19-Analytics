@@ -1,3 +1,8 @@
+def total_to_mil(city):
+    cases_to_mil = (city.total_cases / city.population)*1000000
+    deaths_to_mil = (city.total_deaths / city.population)*1000000
+    tests_to_mil = (city.total_tests / city.population) * 1000000
+
 def create_report(city):
     print("City name: ", end=city.name)
     print("Total cases: ", end=city.total_cases)
@@ -8,7 +13,7 @@ def create_report(city):
     print("Total Recovered ", end=city.total_recovered)
     print("New Recovered:", end=city.new_recovered)
     print("Total Tests:", end=city.total_tests)
-    print("Total Cases to 1M population ", end=city.cases_to_mil)
-    print("Total Deaths to 1M population", end=city.deaths_to_mil)
-    print("Total Tests to 1M population", end=city.tests_to_mil)
-    print("Total Population", end=city.population)
+    print("Total Cases to 1M population: ", end=city.cases_to_mil)
+    print("Total Deaths to 1M population: ", end=city.deaths_to_mil)
+    print("Total Tests to 1M population: ", end=city.tests_to_mil)
+    print("Total Population: ", end=city.population)

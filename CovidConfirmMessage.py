@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from collections import namedtuple
 import datetime
 import Database
+import Status
+import AddPatientToDB
 
 
 class new_patient:
@@ -11,21 +13,23 @@ class new_patient:
     date: datetime
 
 
-def confirm_message(database, new_patient):
+def confirm_message(database, self):
     patient_test = namedtuple('Patient Tested', ['yes', 'no'])
     patient_status = namedtuple('Patient Status ', ['denied', 'confirmed'])
     message = open('Message.txt', 'rt').read()
     print(message)
     if input("1.") == ('yes' or 'Yes'):
-        new_patient.tested = 'yes'
+        self.tested = 'yes'
     else:
-        new_patient.tested = 'no'
+        self.tested = 'no'
         exit(0)
     if input("2.") == ('p' or 'P'):
-        new_patient.status = 'Confirmed'
+        self.status = 'Confirmed'
     else:
-        new_patient.status = 'Denied'
+        self.status = 'Denied'
         exit(0)
-    new_patient.date.day = input("day:")
-    new_patient.date.month = input("month: (number)")
-    new_patient.date.year = input("year:")
+    self.date.day = input("day:")
+    self.date.month = input("month: (number)")
+    self.date.year = input("year:")
+    if patient_status == 'Confirmed':
+        AddPatientToDB.add_patient_to_db(self)
