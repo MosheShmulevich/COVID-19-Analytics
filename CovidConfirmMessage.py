@@ -1,13 +1,7 @@
 from dataclasses import dataclass
 from collections import namedtuple
 import datetime
-import mysql.connector
-
-PatientsDB = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="root"
-)
+import Database
 
 
 class new_patient:
