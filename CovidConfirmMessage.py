@@ -24,7 +24,7 @@ def confirm_message(database, new_patient):
     if input("2.") == ('p' or 'P'):
         new_patient.status = 'Confirmed'
     else:
-        new_patient = 'Denied'
+        new_patient.status = 'Denied'
         exit(0)
     new_patient.date.day = input("day:")
     new_patient.date.month = input("month: (number)")
