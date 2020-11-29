@@ -6,4 +6,4 @@ Please answer the following questions:"
 2. What your result was? P(positive) or N(negative)
 3. When did you do the test?(Date(DD/MM/YYYY format))
 
-for questions, you can contact us at Covid19Analytics@gmail.com or Tel:08-2364145
+for questions, you can contact us at Covid19Analytics@gmail.com or Tel:08-2364145 (made up number and email for now)
