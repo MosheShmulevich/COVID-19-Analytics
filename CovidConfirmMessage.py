@@ -1,11 +1,10 @@
 from dataclasses import dataclass
 from collections import namedtuple
 import datetime
-import Database
-import Status
 import AddPatientToDB
 
 
+@dataclass()
 class new_patient:
     name: str
     tested: str
@@ -32,4 +31,4 @@ def confirm_message(database, self):
     self.date.month = input("month: (number)")
     self.date.year = input("year:")
     if patient_status == 'Confirmed':
-        AddPatientToDB.add_patient_to_db(self)
+        AddPatientToDB.addPatient(self)
