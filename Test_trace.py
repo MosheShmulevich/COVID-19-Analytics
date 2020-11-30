@@ -10,7 +10,7 @@ worksheet = workbook.sheet_by_name(city)    # the sheets are by cities
 
 def find_row(i):
     while i is not None:
-        i = i+1
+        i += 1
     return i
 
 
