@@ -14,7 +14,7 @@ class New_Patient:
 
 
 def addPatient(New_Patient, city):
-    city_sheet = Database.db[city]
+    city_sheet = Database.Covid19DB[city]
 
     def switch_input(k):
         switcher = {
@@ -38,8 +38,8 @@ def addPatient(New_Patient, city):
         if New_Patient.firstname == city_sheet.cell(row=row, column=1).value:
             break
 
-addPatient(New_Patient("Mike", "lasto", 546827551, datetime.strptime("1995/11/25", "%Y/%m/%d"),
-                       datetime.strptime("2020/07/25", "%Y/%m/%d"), "Positive"), "Beer Sheva")
+addPatient(New_Patient("Mike", "lasto", 546827551, datetime.strptime("25/11/1995", "%d/%m/%Y"),
+                       datetime.strptime("25/07/2020", "%d/%m/%Y"), "Positive"), "Beer Sheva")
 addPatient(New_Patient("Moshe", "Shmulevich", 315541367, datetime.strptime("12/02/1996", "%d/%m/%Y"),
                        datetime.strptime("30/10/2020", "%d/%m/%Y"), "Negative"), "Beer Sheva")
-Database.db.save('Database.xlsx')
+Database.Covid19DB.save('Database.xlsx')
