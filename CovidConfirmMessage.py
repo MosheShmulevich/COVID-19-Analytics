@@ -15,6 +15,7 @@ class New_Patient:
     is_tested: str
     status: str
 
+
 def confirm_message(New_Patient):
     message = open('Message.txt', 'rt').read().splitlines()
     print(open('Message.txt', 'rt').read())
@@ -47,4 +48,4 @@ def confirm_message(New_Patient):
 
 
 confirm_message(New_Patient("Mike", "lasto", 546827551, datetime.strptime("25/11/1995", "%d/%m/%Y"),
-                            datetime.strptime("25/07/2020", "%d/%m/%Y"), "Positive", "Yes",  "Active"))
+                            datetime.strptime("25/07/2020", "%d/%m/%Y"), "Positive", "Yes", "Active"))
