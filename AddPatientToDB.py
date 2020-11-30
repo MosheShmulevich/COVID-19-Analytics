@@ -1,7 +1,7 @@
 import Database
 from dataclasses import dataclass
 from datetime import *
-from openpyxl import load_workbook
+
 
 
 @dataclass()
@@ -63,9 +63,7 @@ def addPatient(New_Patient, city):  # function for adding a patient to the 'city
                 for col in range(1, 7):  # adding patient parameters into the empty row by columns
                     city_sheet.cell(row=row, column=col).value = switch_input(col)[col]
                 Database.Covid19DB.save('Database.xlsx')  # after adding parameters,the system "autosaves" the xlsx file
-                break
+                print("Patient added!")
+                return 0
             else:
-                break
-        if New_Patient.firstname == city_sheet.cell(row=row,
-                                                    column=1).value:  # after adding a patient, stops the outer loop
-            break
+                continue

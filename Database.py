@@ -15,4 +15,3 @@ def InsertListToDB():  #Adding cities from Israel city list.xlsx file as a list
         city_sheet.cell(row=row, column=1).value = city
         row += 1
     Covid19DB.save('Database.xlsx')
-InsertListToDB()

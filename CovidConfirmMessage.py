@@ -1,6 +1,5 @@
 import AddPatientToDB
 from dataclasses import dataclass
-from typing import NamedTuple
 from datetime import *
 
 
