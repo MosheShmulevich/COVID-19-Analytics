@@ -1,14 +1,11 @@
+from openpyxl import *
+import Database
+
+
 def create_report(city):
-    print("City name: ", city.name)
-    print("Total cases: ", city.total_cases)
-    print("New Cases ", city.new_cases)
-    print("Active Cases: ", city.active_cases)
-    print("Total Deaths: ", city.total_deaths)
-    print("New Deaths: ", city.new_deaths)
-    print("Total Recovered ", city.total_recovered)
-    print("New Recovered:", city.new_recovered)
-    print("Total Tests:", city.total_tests)
-    print("Total Cases to 1M population: ", (city.total_cases / city.population) * 1000000)
-    print("Total Deaths to 1M population: ", (city.total_deaths / city.population) * 1000000)
-    print("Total Tests to 1M population: ", (city.total_tests / city.population) * 1000000)
-    print("Total Population: ", city.population)
+    for row in range(2, 100):
+        if Database.city_sheet.cell(row=row, column=1).value == city:
+            city_row = row
+    print("Here are the data for the city:", city)
+    for column in range(2, 13):
+        print(Database.city_sheet.cell(row=1, column=column).value, "-", Database.city_sheet.cell(row=city_row, column=column).value)
