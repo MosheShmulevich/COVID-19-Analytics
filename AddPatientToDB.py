@@ -11,9 +11,12 @@ class New_Patient:
     birth_date: datetime
     test_date: datetime
     test_result: str
+    is_tested: str
+    status: str
 
 
 def addPatient(New_Patient, city):
+    New_Patient.is_tested=None
     city_sheet = Database.Covid19DB[city]
 
     def switch_input(k):
@@ -23,7 +26,7 @@ def addPatient(New_Patient, city):
             3: New_Patient.ID,
             4: New_Patient.birth_date,
             5: New_Patient.test_date,
-            6: New_Patient.test_result
+            6: New_Patient.status
         }
         return switcher
 
@@ -32,14 +35,12 @@ def addPatient(New_Patient, city):
             if city_sheet.cell(row=row, column=j).value is None:
                 for col in range(1, 7):
                     city_sheet.cell(row=row, column=col).value = switch_input(col)[col]
+                Database.Covid19DB.save('Database.xlsx')
                 break
             else:
                 break
         if New_Patient.firstname == city_sheet.cell(row=row, column=1).value:
             break
 
-addPatient(New_Patient("Mike", "lasto", 546827551, datetime.strptime("25/11/1995", "%d/%m/%Y"),
-                       datetime.strptime("25/07/2020", "%d/%m/%Y"), "Positive"), "Beer Sheva")
-addPatient(New_Patient("Moshe", "Shmulevich", 315541367, datetime.strptime("12/02/1996", "%d/%m/%Y"),
-                       datetime.strptime("30/10/2020", "%d/%m/%Y"), "Negative"), "Beer Sheva")
-Database.Covid19DB.save('Database.xlsx')
+
+

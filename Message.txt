@@ -2,7 +2,7 @@
 we're checking to confirm or deny Covid 19 patients for a database.
 Please answer the following questions:"
 
-1. Did you do a test?(yes/no) (if no the program will stop)
+1. Did you do a test?(y/n) (if no the program will stop)
 2. What your result was? P(positive) or N(negative)
 3. When did you do the test?(Date(DD/MM/YYYY format))
 
