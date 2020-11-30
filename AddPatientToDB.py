@@ -1,6 +1,7 @@
 import Database
 from dataclasses import dataclass
 from datetime import *
+from openpyxl import load_workbook
 
 
 @dataclass()
@@ -16,6 +17,12 @@ class New_Patient:
 
 
 def CreateNewSheet(city):  # function for creating a new 'city' sheet in xlsx database
+    def FormatCells(city_sheet):
+        for row in range(2, 28):
+            for column in range(3, 7):
+                if column == 3:
+                    city_sheet.cell(row, column)
+
     def SwitchTitle(column):  # function for adding to the xlsx table columns, titles
         switcher = {
             1: 'Firstname',
