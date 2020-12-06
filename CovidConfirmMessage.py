@@ -8,11 +8,13 @@ class New_Patient:
     firstname: str
     lastname: str
     ID: int
-    birth_date: datetime
-    test_date: datetime
+    birth_date: str
+    test_date: str
     test_result: str
     is_tested: str
     status: str
+    is_quarantined: str
+    where_quarantined: str
 
 
 def confirm_message(New_Patient):
@@ -46,5 +48,6 @@ def confirm_message(New_Patient):
         AddPatientToDB.addPatient(New_Patient, New_Patient.city)  # adding the patient to the given city sheet
 
 
-confirm_message(New_Patient("Johnny", "Bravo", 544327551, datetime.strptime("13/08/1998", "%d/%m/%Y"),
-                            datetime.strptime("25/07/2020", "%d/%m/%Y"), "Positive", "Yes", "Active"))
+confirm_message(New_Patient("Johnny", "Bravo", 544327551, ("13/08/1998"),
+                            ("25/07/2020"), "Positive", "Yes", "Active", "yes",
+                            "Leonardo Hotel"))
