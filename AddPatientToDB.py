@@ -61,7 +61,7 @@ def addPatient(New_Patient, city):  # function for adding a patient to the 'city
         }
         return switcher
 
-    for row in range(2, 28):  # starts from row#2 because #1 is titles and end in #27(temporarly)
+    for row in range(2, 28):  # starts from row#2 because #1 is titles and end in #27(temporarily)
         for j in range(1, 2):  # start in column#1 to check if its empty
             if city_sheet.cell(row=row, column=j).value is None:
                 for col in range(1, 7):  # adding patient parameters into the empty row by columns
@@ -73,12 +73,51 @@ def addPatient(New_Patient, city):  # function for adding a patient to the 'city
                 continue
 
 
+def DateCheck(option):
+    if option == 0:
+        year = int(input("Year of birth: "))
+        if year < 1900 or year > 2021:
+            exit("Invalid Value!")
+        month = int(input("Month of birth: "))
+        if month < 1 or month > 12:
+            exit("Invalid Value!")
+        day = int(input("Day of birth: "))
+        if month == 2:
+            if day < 1 or day > 29:
+                exit("Invalid Value!")
+        if month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 10 or month == 12:
+            if day < 1 or day > 31:
+                exit("Invalid Value!")
+        if month == 4 or month == 6 or month == 9 or month == 11:
+            if day < 1 or day > 30:
+                exit("Invalid Value!")
+        return datetime.strptime((str(day), "/", str(month), "/", str(year)), "%d/%m/%Y")
+    else:
+        year = int(input("year tested in: "))
+        if year < 2019 or year > 2022:
+            exit("Invalid Value!")
+        month = int(input("Test month: "))
+        if month < 1 or month > 12:
+            exit("Invalid Value!")
+        day = int(input("Test day: "))
+        if month == 2:
+            if day < 1 or day > 29:
+                exit("Invalid Value!")
+        if month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 10 or month == 12:
+            if day < 1 or day > 31:
+                exit("Invalid Value!")
+        if month == 4 or month == 6 or month == 9 or month == 11:
+            if day < 1 or day > 30:
+                exit("Invalid Value!")
+        return datetime.strptime((str(day), "/", str(month), "/", str(year)), "%d/%m/%Y")
+
+
 def InputNewPatient():
     firstname = input("Patient's firstname: ")
     lastname = input("Patient's lastname: ")
     id = int(input("Patient's id: "))
-    birthday = datetime.strptime(raw_input("Patient's date of birth: "), "%d/%m/%Y")
-    TestDate = datetime.strptime(raw_input("When the patient did the test: "), "%d/%m/%Y")
+    birthday = DateCheck(0)
+    TestDate = DateCheck(1)
     Status = input("What's the patient's status? (Active/Recovered)")
     TestResult = "Positive"
     IsTested = "Yes"
