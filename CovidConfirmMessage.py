@@ -46,5 +46,6 @@ def confirm_message(New_Patient):
         AddPatientToDB.addPatient(New_Patient, New_Patient.city)        #adding the patient to the given city sheet
 
 
-confirm_message(New_Patient("Mike", "lasto", 546827551, datetime.strptime("25/11/1995", "%d/%m/%Y"),
+confirm_message(New_Patient("Johhny", "Bravo", 544327551, datetime.strptime("13/08/1998", "%d/%m/%Y"),
                             datetime.strptime("25/07/2020", "%d/%m/%Y"), "Positive", "Yes", "Active"))
+

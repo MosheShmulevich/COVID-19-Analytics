@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from datetime import *
 
 
-
 @dataclass()
 class New_Patient:
     firstname: str
@@ -17,11 +16,15 @@ class New_Patient:
 
 
 def CreateNewSheet(city):  # function for creating a new 'city' sheet in xlsx database
-    def FormatCells(city_sheet):
+    def FormatCells(city_sheet):  # function for formatting the date and id cells according to the data
         for row in range(2, 28):
-            for column in range(3, 7):
-                if column == 3:
-                    city_sheet.cell(row, column)
+            for column in range(3, 6):
+                cell = city_sheet.cell(row, column)
+                if column == 4 or column == 5:
+                    cell.number_format = "DD-MM-YYYY"
+                elif column == 3:
+                    cell.number_format = "0"
+        Database.Covid19DB.save('Database.xlsx')
 
     def SwitchTitle(column):  # function for adding to the xlsx table columns, titles
         switcher = {
@@ -33,7 +36,7 @@ def CreateNewSheet(city):  # function for creating a new 'city' sheet in xlsx da
             6: 'Patient Status'}
         return switcher
 
-    Database.Covid19DB.create_sheet(city)  # creating a new sheet with 'city' name
+    FormatCells(Database.Covid19DB.create_sheet(city))  # creating a new sheet with 'city' name
     city_sheet = Database.Covid19DB[city]  # implementing the 'city' sheet into a variable "city_sheet"
     for colmn in range(1, 7):  # adding to the xlsx table columns, titles
         city_sheet.cell(row=1, column=colmn).value = SwitchTitle(colmn)[colmn]
