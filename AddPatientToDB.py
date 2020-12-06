@@ -1,5 +1,4 @@
 from pip._vendor.distlib.compat import raw_input
-
 import Database
 from dataclasses import dataclass
 from datetime import *
@@ -45,7 +44,7 @@ def CreateNewSheet(city):  # function for creating a new 'city' sheet in xlsx da
 
 
 def addPatient(New_Patient, city):  # function for adding a patient to the 'city' sheet
-    if city not in Database.Covid19DB.sheetnames:  # if there is no 'city' sheet , calls a fucntion to create one
+    if city not in Database.Covid19DB.sheetnames:  # if there is no 'city' sheet , calls a function to create one
         CreateNewSheet(city)
 
     New_Patient.is_tested = None
@@ -56,8 +55,8 @@ def addPatient(New_Patient, city):  # function for adding a patient to the 'city
             1: New_Patient.firstname,
             2: New_Patient.lastname,
             3: New_Patient.ID,
-            4: New_Patient.birth_date,
-            5: New_Patient.test_date,
+            4: datetime.strptime(New_Patient.birth_date, "%d/%m/%Y"),
+            5: datetime.strptime(New_Patient.test_date, "%d/%m/%Y"),
             6: New_Patient.status
         }
         return switcher
@@ -77,11 +76,11 @@ def addPatient(New_Patient, city):  # function for adding a patient to the 'city
 def InputNewPatient():
     firstname = input("Patient's firstname: ")
     lastname = input("Patient's lastname: ")
-    id = input("Patient's id: ")
+    id = int(input("Patient's id: "))
     birthday = datetime.strptime(raw_input("Patient's date of birth: "), "%d/%m/%Y")
     TestDate = datetime.strptime(raw_input("When the patient did the test: "), "%d/%m/%Y")
     Status = input("What's the patient's status? (Active/Recovered)")
     TestResult = "Positive"
     IsTested = "Yes"
     city = input("Where is the patient live?")
-    addPatient((firstname, lastname, id, birthday, TestDate, TestResult, IsTested, Status), city)
+    addPatient(New_Patient(firstname, lastname, id, birthday, TestDate, TestResult, IsTested, Status), city)
