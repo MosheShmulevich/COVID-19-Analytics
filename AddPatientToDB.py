@@ -42,7 +42,7 @@ def CreateNewSheet(city):  # function for creating a new 'city' sheet in xlsx da
         }
         return switcher
 
-    Database.Covid19DB.create_sheet(city)  # creating a new sheet with 'city' name
+    FormatCells(Database.Covid19DB.create_sheet(city) ) # creating a new sheet with 'city' name
     city_sheet = Database.Covid19DB[city]  # implementing the 'city' sheet into a variable "city_sheet"
     for colmn in range(1, 9):  # adding to the xlsx table columns, titles
         city_sheet.cell(row=1, column=colmn).value = SwitchTitle(colmn)[colmn]
