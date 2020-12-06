@@ -1,3 +1,5 @@
+from pip._vendor.distlib.compat import raw_input
+
 import Database
 from dataclasses import dataclass
 from datetime import *
@@ -70,3 +72,16 @@ def addPatient(New_Patient, city):  # function for adding a patient to the 'city
                 return 0
             else:
                 continue
+
+
+def InputNewPatient():
+    firstname = input("Patient's first name: ")
+    lastname = input("Patient's first name: ")
+    id = input("Patient's id: ")
+    birthday = datetime.strptime(raw_input("Patient's date of birth: "), "%d/%m/%Y")
+    TestDate = datetime.strptime(raw_input("When the patient did the test: "), "%d/%m/%Y")
+    Status = input("What's the patient's status? (Active/Recovered)")
+    TestResult = "Positive"
+    IsTested = "Yes"
+    city = input("Where is the patient live?")
+    addPatient((firstname, lastname, id, birthday, TestDate, TestResult, IsTested, Status), city)
