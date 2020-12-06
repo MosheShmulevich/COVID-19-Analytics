@@ -75,8 +75,8 @@ def addPatient(New_Patient, city):  # function for adding a patient to the 'city
 
 
 def InputNewPatient():
-    firstname = input("Patient's first name: ")
-    lastname = input("Patient's first name: ")
+    firstname = input("Patient's firstname: ")
+    lastname = input("Patient's lastname: ")
     id = input("Patient's id: ")
     birthday = datetime.strptime(raw_input("Patient's date of birth: "), "%d/%m/%Y")
     TestDate = datetime.strptime(raw_input("When the patient did the test: "), "%d/%m/%Y")
