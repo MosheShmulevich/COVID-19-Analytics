@@ -1,5 +1,4 @@
 import Database
-from datetime import *
 
 
 def Register():

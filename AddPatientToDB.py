@@ -1,7 +1,7 @@
-from pip._vendor.distlib.compat import raw_input
-import Database
 from dataclasses import dataclass
 from datetime import *
+
+import Database
 
 
 @dataclass()

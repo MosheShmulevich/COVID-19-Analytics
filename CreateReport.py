@@ -1,4 +1,3 @@
-from openpyxl import *
 import Database
 
 
@@ -40,5 +39,3 @@ def create_CityAndOption_report():
             if Database.city_sheet.cell(row=1, column=column) == OptionChoose(option):
                 print(Database.city_sheet.cell(row=row, column=1).value, ":",
                       Database.city_sheet.cell(row=row, column=column).value)
-
-create_CityAndOption_report()
