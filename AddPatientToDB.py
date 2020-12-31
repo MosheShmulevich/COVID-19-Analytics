@@ -4,7 +4,7 @@ from datetime import *
 import Database
 
 
-@dataclass()
+@dataclass
 class New_Patient:
     firstname: str
     lastname: str
