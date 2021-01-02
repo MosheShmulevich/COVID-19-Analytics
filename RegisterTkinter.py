@@ -81,5 +81,5 @@ class RegisterWindow(Tk):
                         continue
 
 
-RegisterWindow = RegisterWindow()
-RegisterWindow.mainloop()
+Register_Window = RegisterWindow()
+Register_Window.mainloop()

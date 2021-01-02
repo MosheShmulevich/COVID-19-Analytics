@@ -119,6 +119,10 @@ class AddPage(Tk):
             self.QuarantineHome.configure(state=NORMAL)
             self.QuarantineHotel.configure(state=NORMAL)
             self.QuarantineHospital.configure(state=NORMAL)
+        else:
+            self.QuarantineHome.configure(state=DISABLED)
+            self.QuarantineHotel.configure(state=DISABLED)
+            self.QuarantineHospital.configure(state=DISABLED)
 
     def AssignData(self):
         self.BirthDate = datetime.strptime((str(self.birth_Day.get()) + "/" + str(self.birth_Month.get()) + "/" +

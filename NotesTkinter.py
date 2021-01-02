@@ -22,15 +22,15 @@ class NotesPage(Tk):
         self.Message = StringVar()
 
         self.NameLabel = Label(self.Tab1, text="Name").grid(row=0, column=0)
-        self.NameBox = Entry(self.Tab1, width=20)
+        self.NameBox = Entry(self.Tab1, width=20, textvariable=self.Name)
         self.NameBox.grid(row=1, column=0)
 
         self.SubjectLabel = Label(self.Tab1, text="Subject").grid(row=3, column=0)
-        self.SubjectBox = Entry(self.Tab1, width=30)
+        self.SubjectBox = Entry(self.Tab1, width=30, textvariable=self.Subject)
         self.SubjectBox.grid(row=4, column=0, columnspan=20)
 
         self.MessageLabel = Label(self.Tab1, text="Message").grid(row=5, column=0)
-        self.MessageBox = Entry(self.Tab1)
+        self.MessageBox = Entry(self.Tab1, textvariable=self.Message)
         self.MessageBox.place(x=2, y=110, width=400, height=100)
 
         self.SubmitButton = Button(self.Tab1, text="Submit", command=self.SubmitCommand)
