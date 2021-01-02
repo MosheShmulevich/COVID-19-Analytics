@@ -67,7 +67,7 @@ class ReportsPage(Tk):
                 r += 1
 
     def create_city_report(self):
-        city_row = 0
+        city_row = 1
         for row in range(2, 100):
             if Database.city_sheet.cell(row=row, column=1).value == self.city.get():
                 city_row = row
