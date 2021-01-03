@@ -24,6 +24,7 @@ class AddPage(Tk):
         self.City = StringVar()
         self.First_Name = StringVar()
         self.Last_Name = StringVar()
+        self.Sex = StringVar()
         self.ID = IntVar()
 
         self.birth_Day = IntVar()
@@ -54,6 +55,11 @@ class AddPage(Tk):
         self.LastName = Label(self.Tab1, text="Last Name").grid(row=3, column=0)  # LastName Label
         self.last_name = ttk.Entry(self.Tab1, width=20, textvariable=self.Last_Name).grid(row=3,
                                                                                           column=1)  # LastName TextBox
+
+        self.sex = Label(self.Tab1, text="Sex:").grid(row=4, column=0)
+        self.sexCombo = ttk.Combobox(self.Tab1, width=7, textvariable=self.Sex)
+        self.sexCombo.grid(row=4, column=1)
+        self.sexCombo['values'] = ('Male', 'Female')
 
         self.id = Label(self.Tab1, text="ID").grid(row=5, column=0)  # ID Label
         self.iD = ttk.Entry(self.Tab1, width=20, textvariable=self.ID).grid(row=5, column=1)  # ID TextBox
@@ -133,11 +139,11 @@ class AddPage(Tk):
         def CreateNewSheet(city):  # function for creating a new 'city' sheet in xlsx database
             def FormatCells(city_sheet):  # function for formatting the date and id cells according to the data
                 for row in range(2, 28):
-                    for column in range(3, 6):
+                    for column in range(4, 7):
                         cell = city_sheet.cell(row, column)
-                        if column == 4 or column == 5:
+                        if column == 5 or column == 6:
                             cell.number_format = "DD-MM-YYYY"
-                        elif column == 3:
+                        elif column == 4:
                             cell.number_format = "0"
                 Database.Covid19DB.save('Database.xlsx')
 
@@ -145,12 +151,13 @@ class AddPage(Tk):
                 switcher = {
                     1: 'Firstname',
                     2: 'Lastname',
-                    3: 'ID',
-                    4: 'Birth date',
-                    5: 'Test date',
-                    6: 'Patient Status',
-                    7: 'Quarantined',
-                    8: 'Where quarantined'
+                    3: 'Sex',
+                    4: 'ID',
+                    5: 'Birth date',
+                    6: 'Test date',
+                    7: 'Patient Status',
+                    8: 'Quarantined',
+                    9: 'Where quarantined'
                 }
                 return switcher
 
@@ -163,12 +170,13 @@ class AddPage(Tk):
             switcher = {
                 1: self.First_Name.get(),
                 2: self.Last_Name.get(),
-                3: self.ID.get(),
-                4: self.BirthDate,
-                5: self.TestDate,
-                6: self.PatientStatus.get(),
-                7: self.Quarantined.get(),
-                8: self.WhereQuarntined.get()
+                3: self.Sex.get(),
+                4: self.ID.get(),
+                5: self.BirthDate,
+                6: self.TestDate,
+                7: self.PatientStatus.get(),
+                8: self.Quarantined.get(),
+                9: self.WhereQuarntined.get()
             }
             return switcher
 
@@ -179,10 +187,11 @@ class AddPage(Tk):
         for row in range(2, 28):  # starts from row#2 because #1 is titles and end in #27(temporarily)
             for j in range(1, 2):  # start in column#1 to check if its empty
                 if citySheet.cell(row=row, column=j).value is None:
-                    for col in range(1, 9):  # adding patient parameters into the empty row by columns
+                    for col in range(1, 10):  # adding patient parameters into the empty row by columns
                         citySheet.cell(row=row, column=col).value = switch_input(col)[col]
                     Database.Covid19DB.save(
                         'Database.xlsx')  # after adding parameters,the system "autosaves" the xlsx file
+                    self.Success = Label(self.Tab1, text="Patient Added!").grid(row=13, column=0)
                     print("Patient added!")
                     return 0
 

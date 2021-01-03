@@ -3,7 +3,6 @@ from tkinter import *
 from tkinter import ttk
 
 
-
 class ReportsPage(Tk):
     def __init__(self):
         super(ReportsPage, self).__init__()
@@ -133,12 +132,13 @@ class ReportsPage(Tk):
         for column in range(2, 14):
             self.CityResult = Label(self, text=(Database.city_sheet.cell(row=1, column=column).value, ':',
                                                 Database.city_sheet.cell(row=city_row, column=column).value)).pack()
+
     def ReportByID(self):
         citySheet = Database.Covid19DB[self.idCity.get()]
         id = self.iD.get()
         PatientRow = None
         for rw in range(2, 28):
-            if citySheet.cell(row=rw, column=3).value == id:
+            if citySheet.cell(row=rw, column=4).value == id:
                 PatientRow = rw
         if PatientRow == None:
             self.NoPatient = Label(self.ID, text="Patient with such id do not exist in the system!").place(x=500, y=500)
@@ -152,29 +152,33 @@ class ReportsPage(Tk):
         self.lastname.config(font=('Lato', 11))
         self.lastname.place(x=240, y=90)
 
-        self.id = Label(self.ID, text=("ID:", citySheet.cell(row=PatientRow, column=3).value))
+        self.id = Label(self.ID, text=("Sex:", citySheet.cell(row=PatientRow, column=3).value))
         self.id.config(font=('Lato', 11))
         self.id.place(x=240, y=135)
 
-        self.bDay = Label(self.ID, text=("Date of birth:", citySheet.cell(row=PatientRow, column=4).value))
+        self.id = Label(self.ID, text=("ID:", citySheet.cell(row=PatientRow, column=4).value))
+        self.id.config(font=('Lato', 11))
+        self.id.place(x=240, y=180)
+
+        self.bDay = Label(self.ID, text=("Date of birth:", citySheet.cell(row=PatientRow, column=5).value))
         self.bDay.config(font=('Lato', 11))
-        self.bDay.place(x=240, y=180)
+        self.bDay.place(x=240, y=225)
 
-        self.testDay = Label(self.ID, text=("Test Date:", citySheet.cell(row=PatientRow, column=5).value))
+        self.testDay = Label(self.ID, text=("Test Date:", citySheet.cell(row=PatientRow, column=6).value))
         self.testDay.config(font=('Lato', 11))
-        self.testDay.place(x=240, y=225)
+        self.testDay.place(x=240, y=270)
 
-        self.status = Label(self.ID, text=("Patient Status:", citySheet.cell(row=PatientRow, column=6).value))
+        self.status = Label(self.ID, text=("Patient Status:", citySheet.cell(row=PatientRow, column=7).value))
         self.status.config(font=('Lato', 11))
-        self.status.place(x=240, y=275)
+        self.status.place(x=240, y=315)
 
-        self.Quaran = Label(self.ID, text=("In Quarantine?:", citySheet.cell(row=PatientRow, column=7).value))
+        self.Quaran = Label(self.ID, text=("In Quarantine?:", citySheet.cell(row=PatientRow, column=8).value))
         self.Quaran.config(font=('Lato', 11))
-        self.Quaran.place(x=240, y=320)
+        self.Quaran.place(x=240, y=360)
 
-        self.WhereQuaran = Label(self.ID, text=("Where In Quarantine?", citySheet.cell(row=PatientRow, column=8).value))
+        self.WhereQuaran = Label(self.ID, text=("Where In Quarantine?", citySheet.cell(row=PatientRow, column=9).value))
         self.WhereQuaran.config(font=('Lato', 11))
-        self.WhereQuaran.place(x=240, y=365)
+        self.WhereQuaran.place(x=240, y=405)
 
     def ReportByName(self):
         citySheet = Database.Covid19DB[self.SelectedCity.get()]
@@ -182,10 +186,12 @@ class ReportsPage(Tk):
         last_name = self.LastName.get()
         PatientRow = None
         for rw in range(2, 28):
-            if citySheet.cell(row=rw, column=1).value == first_name and citySheet.cell(row=rw, column=2).value == last_name:
+            if citySheet.cell(row=rw, column=1).value == first_name and citySheet.cell(row=rw,
+                                                                                       column=2).value == last_name:
                 PatientRow = rw
         if PatientRow == None:
-            self.NoPatient = Label(self.Name, text="Patient with such id do not exist in the system!").place(x=500, y=500)
+            self.NoPatient = Label(self.Name, text="Patient with such id do not exist in the system!").place(x=500,
+                                                                                                             y=500)
             return 1
 
         self.firstname = Label(self.Name, text=("Firstname:", citySheet.cell(row=PatientRow, column=1).value))
@@ -196,30 +202,34 @@ class ReportsPage(Tk):
         self.lastname.config(font=('Lato', 11))
         self.lastname.place(x=240, y=90)
 
-        self.id = Label(self.Name, text=("ID:", citySheet.cell(row=PatientRow, column=3).value))
+        self.id = Label(self.ID, text=("Sex:", citySheet.cell(row=PatientRow, column=3).value))
         self.id.config(font=('Lato', 11))
         self.id.place(x=240, y=135)
 
-        self.bDay = Label(self.Name, text=("Date of birth:", citySheet.cell(row=PatientRow, column=4).value))
+        self.id = Label(self.Name, text=("ID:", citySheet.cell(row=PatientRow, column=4).value))
+        self.id.config(font=('Lato', 11))
+        self.id.place(x=240, y=180)
+
+        self.bDay = Label(self.Name, text=("Date of birth:", citySheet.cell(row=PatientRow, column=5).value))
         self.bDay.config(font=('Lato', 11))
-        self.bDay.place(x=240, y=180)
+        self.bDay.place(x=240, y=225)
 
-        self.testDay = Label(self.Name, text=("Test Date:", citySheet.cell(row=PatientRow, column=5).value))
+        self.testDay = Label(self.Name, text=("Test Date:", citySheet.cell(row=PatientRow, column=6).value))
         self.testDay.config(font=('Lato', 11))
-        self.testDay.place(x=240, y=225)
+        self.testDay.place(x=240, y=270)
 
-        self.status = Label(self.Name, text=("Patient Status:", citySheet.cell(row=PatientRow, column=6).value))
+        self.status = Label(self.Name, text=("Patient Status:", citySheet.cell(row=PatientRow, column=7).value))
         self.status.config(font=('Lato', 11))
-        self.status.place(x=240, y=275)
+        self.status.place(x=240, y=315)
 
-        self.Quaran = Label(self.Name, text=("In Quarantine?:", citySheet.cell(row=PatientRow, column=7).value))
+        self.Quaran = Label(self.Name, text=("In Quarantine?:", citySheet.cell(row=PatientRow, column=8).value))
         self.Quaran.config(font=('Lato', 11))
-        self.Quaran.place(x=240, y=320)
+        self.Quaran.place(x=240, y=360)
 
-        self.WhereQuaran = Label(self.Name, text=("Where In Quarantine?", citySheet.cell(row=PatientRow, column=8).value))
+        self.WhereQuaran = Label(self.Name,
+                                 text=("Where In Quarantine?", citySheet.cell(row=PatientRow, column=9).value))
         self.WhereQuaran.config(font=('Lato', 11))
-        self.WhereQuaran.place(x=240, y=365)
-
+        self.WhereQuaran.place(x=240, y=405)
 
 
 Reports = ReportsPage()
