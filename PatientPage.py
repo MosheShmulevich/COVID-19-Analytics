@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 import Database
+import pygame
+from winsound import *
 
 
 class PatientPage(Tk):
@@ -152,6 +154,9 @@ class SaveConfirm(Tk):
         self.Confirm()
 
     def Confirm(self):
+        pygame.mixer.init()
+        pygame.mixer.music.load("are-you-sure-about-that.mp3")    # For fun
+        pygame.mixer.music.play()
         self.ConfirmMessage = Label(self, text="Are you sure about that?")
         self.ConfirmMessage.pack(side=TOP)
         self.ConfirmMessage.configure(font=('Lato', 12, 'bold'))
