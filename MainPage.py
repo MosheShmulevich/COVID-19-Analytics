@@ -1,4 +1,5 @@
 from tkinter import *
+
 import AddPatientToDBTkinter
 import NotesTkinter
 import ReportsTkinter
@@ -26,6 +27,6 @@ class MainPage(Tk):
         self.RegisterButton.place(x=120, y=240, width=370, height=70)
 
 
-
 Page = MainPage()
 Page.mainloop()
+
