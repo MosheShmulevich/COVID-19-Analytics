@@ -28,16 +28,13 @@ class MainPage(Tk):
 
     def make_report(self):
         Report = ReportsTkinter.ReportsPage()
-        Report.mainloop()
     def add_patient(self):
-        Add = AddPatientToDBTkinter.AddPage()
-        Add.mainloop()
+        Patient = AddPatientToDBTkinter.AddPage()
     def note(self):
         Note = NotesTkinter.NotesPage()
-        Note.mainloop()
     def Register(self):
-        regist = RegisterTkinter.RegisterWindow()
-        regist.mainloop()
+        register = RegisterTkinter.RegisterWindow()
+
 
 Page = MainPage()
 Page.mainloop()

@@ -140,5 +140,5 @@ class PatientPage(Tk):
         self.PatientNotes.configure(state=DISABLED)
 
 
-Page = PatientPage()
-Page.mainloop()
+# Page = PatientPage()
+# Page.mainloop()

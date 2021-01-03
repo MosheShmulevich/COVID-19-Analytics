@@ -37,13 +37,36 @@ class NotesPage(Tk):
         self.SubmitButton.place(x=420, y=184)
 
     def SubmitCommand(self):
-        self.ThanksMessage = Label(self.Tab1, text="Thank you  for your note").place(x=200, y=10)
-        self.NameBox.delete(0, END)
-        self.SubjectBox.delete(0, END)
-        self.MessageBox.delete("1.0", END)
+        New_Window = NewWindow()
 
 
+class NewWindow(Tk):
+    def __init__(self):
+        super(NewWindow, self).__init__()
+        self.title("Confirm")
+        self.geometry("250x100")
+        self.maxsize(300, 100)
+        self.Confirm()
 
+    def Confirm(self):
+        self.ConfirmMessage = Label(self, text="Are you sure about that?")
+        self.ConfirmMessage.pack(side=TOP)
+        self.ConfirmMessage.configure(font=('Lato', 12, 'bold'))
+
+        self.NoButton = ttk.Button(self, text="No", command=self.ReturnNo)
+        self.NoButton.pack(side=LEFT)
+        self.YesButton = ttk.Button(self, text="Yes", command=self.ReturnYes)
+        self.YesButton.pack(side=RIGHT)
+
+    def ReturnYes(self):
+        Page.ThanksMessage = Label(Page.Tab1, text="Thank you  for your note").place(x=200, y=10)
+        Page.NameBox.delete(0, END)
+        Page.SubjectBox.delete(0, END)
+        Page.MessageBox.delete("1.0", END)
+        self.destroy()
+
+    def ReturnNo(self):
+        self.destroy()
 
 
 Page = NotesPage()
