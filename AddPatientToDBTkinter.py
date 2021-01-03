@@ -196,5 +196,5 @@ class AddPage(Tk):
                     return 0
 
 
-# PatientAdd = AddPage()
-# PatientAdd.mainloop()
+PatientAdd = AddPage()
+PatientAdd.mainloop()

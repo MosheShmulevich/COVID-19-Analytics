@@ -1,5 +1,4 @@
 from tkinter import *
-
 import AddPatientToDBTkinter
 import NotesTkinter
 import ReportsTkinter
@@ -36,6 +35,6 @@ class MainPage(Tk):
         register = RegisterTkinter.RegisterWindow()
 
 
-Page = MainPage()
-Page.mainloop()
+Main_Page = MainPage()
+Main_Page.mainloop()
 

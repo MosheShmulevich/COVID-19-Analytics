@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import Database
 
+
 class PatientPage(Tk):
     def __init__(self):
         super(PatientPage, self).__init__()
@@ -65,6 +66,7 @@ class PatientPage(Tk):
     def MakeInterface(self):
         self.City = StringVar()
         self.ID = IntVar()
+
         self.CityCombo = ttk.Combobox(self.MainTab, width=10, textvariable=self.City)
         self.CityCombo.place(x=600, y=15)
         self.CityCombo['values'] = Database.Covid19DB.sheetnames
@@ -75,7 +77,7 @@ class PatientPage(Tk):
         self.IdEntry = ttk.Entry(self.MainTab, width=15, textvariable=self.ID)
         self.IdEntry.place(x=600, y=45)
 
-        self.PatientNotes = Text(self.MainTab, state=DISABLED)
+        self.PatientNotes = Text(self.MainTab, state=NORMAL)
         self.PatientNotes.place(x=500, y=230, width=400, height=240)
 
         self.EditNotes = Button(self.MainTab, width=9, text="Edit", command=self.edit)
@@ -83,62 +85,89 @@ class PatientPage(Tk):
 
         self.SaveNotes = Button(self.MainTab, width=9, text="Save", command=self.save)
         self.SaveNotes.place(x=910, y=260)
+
     def get_Data(self):
         citySheet = Database.Covid19DB[self.City.get()]
         ID = self.ID.get()
-        Row = None
+        self.Row = None
         Text = "Patient with id {0} doesn't exist in the city database".format(ID)
         self.Error = Label(self.MainTab, text=Text)
         for ROW in range(1, 28):
             if citySheet.cell(row=ROW, column=4).value == ID:
-                Row = ROW
-        if Row == None:
+                self.Row = ROW
+        if self.Row == None:
             self.Error.place(x=300, y=70)
             self.Error.configure(font=('Lato', 11, 'bold'))
             return -1
-
         self.Error.destroy()
-        self.firstname = Label(self.MainTab, text=citySheet.cell(row=Row, column=1).value)
+        self.firstname = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=1).value)
         self.firstname.place(x=50, y=40)
         self.firstname.configure(font=('Lato', 11))
 
-        self.lastname = Label(self.MainTab, text=citySheet.cell(row=Row, column=2).value)
+        self.lastname = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=2).value)
         self.lastname.place(x=50, y=95)
         self.lastname.configure(font=('Lato', 11))
 
-        self.sex = Label(self.MainTab, text=citySheet.cell(row=Row, column=3).value)
+        self.sex = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=3).value)
         self.sex.place(x=50, y=150)
         self.sex.configure(font=('Lato', 11))
 
-        self.id = Label(self.MainTab, text=citySheet.cell(row=Row, column=4).value)
+        self.id = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=4).value)
         self.id.place(x=50, y=205)
         self.id.configure(font=('Lato', 11))
 
-        self.bDay = Label(self.MainTab, text=citySheet.cell(row=Row, column=5).value)
+        self.bDay = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=5).value)
         self.bDay.place(x=50, y=260)
         self.bDay.configure(font=('Lato', 11))
 
-        self.tDay = Label(self.MainTab, text=citySheet.cell(row=Row, column=6).value)
+        self.tDay = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=6).value)
         self.tDay.place(x=50, y=315)
         self.tDay.configure(font=('Lato', 11))
 
-        self.status = Label(self.MainTab, text=citySheet.cell(row=Row, column=7).value)
+        self.status = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=7).value)
         self.status.place(x=50, y=370)
         self.status.configure(font=('Lato', 11))
 
-        self.Quaran = Label(self.MainTab, text=citySheet.cell(row=Row, column=8).value)
+        self.Quaran = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=8).value)
         self.Quaran.place(x=50, y=425)
         self.Quaran.configure(font=('Lato', 11))
 
-        self.WhereQuaran = Label(self.MainTab, text=citySheet.cell(row=Row, column=9).value)
+        self.WhereQuaran = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=9).value)
         self.WhereQuaran.place(x=50, y=480)
         self.WhereQuaran.configure(font=('Lato', 11))
+
     def edit(self):
         self.PatientNotes.configure(state=NORMAL)
 
     def save(self):
         self.PatientNotes.configure(state=DISABLED)
+        Save = SaveConfirm()
 
+class SaveConfirm(Tk):
+    def __init__(self):
+        super(SaveConfirm, self).__init__()
+        self.title("Are you sure?")
+        self.geometry("250x100")
+        self.maxsize(300, 100)
+        self.Confirm()
 
-# Page = PatientPage()
-# Page.mainloop()
+    def Confirm(self):
+        self.ConfirmMessage = Label(self, text="Are you sure about that?")
+        self.ConfirmMessage.pack(side=TOP)
+        self.ConfirmMessage.configure(font=('Lato', 12, 'bold'))
+
+        self.NoButton = ttk.Button(self, text="No", command=self.ReturnNo)
+        self.NoButton.pack(side=LEFT)
+        self.YesButton = ttk.Button(self, text="Yes", command=self.ReturnYes)
+        self.YesButton.pack(side=RIGHT)
+
+    def ReturnYes(self):
+        Database.Covid19DB[Page.City.get()].cell(row=Page.Row, column=10).value = Page.PatientNotes.get("1.0", END)
+        Database.Covid19DB.save('Database.xlsx')
+        self.destroy()
+
+    def ReturnNo(self):
+        self.destroy()
+
+Page = PatientPage()
+Page.mainloop()
