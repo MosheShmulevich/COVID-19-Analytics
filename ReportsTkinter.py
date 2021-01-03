@@ -16,17 +16,20 @@ class ReportsPage(Tk):
         self.tab_control = ttk.Notebook(self)
 
         self.Category = ttk.Frame(self.tab_control)
-        self.tab_control.add(self.Category, text="Find by Category")
+        self.tab_control.add(self.Category, text="Report by Category")
 
         self.City = ttk.Frame(self.tab_control)
-        self.tab_control.add(self.City, text="Find by City")
+        self.tab_control.add(self.City, text="Report by City")
+
+        self.Location = ttk.Frame(self.tab_control)
+        self.tab_control.add(self.Location, text="Report by Quarantine Location")
 
         self.ID = ttk.Frame(self.tab_control)
         self.tab_control.add(self.ID, text="Find by ID")
 
         self.Name = ttk.Frame(self.tab_control)
-
         self.tab_control.add(self.Name, text="Find by Name")
+
         self.tab_control.pack(expan=1, fill="both")
 
     def add_widgets(self):
@@ -46,9 +49,9 @@ class ReportsPage(Tk):
 
         self.button = ttk.Button(self.Category, text="Create report", command=self.create_CityAndOption_report)
         self.button.grid(row=2, column=1)
-        ##########################
+        #################################
 
-        ########## City Tab #########
+        ############ City Tab ###########
         self.CityMessage = Label(self.City, text="Choose which city data you need")
         self.CityMessage.grid(row=0, column=0, columnspan=20)
         self.CityMessage.config(font=('Lato', 14,))
@@ -61,9 +64,44 @@ class ReportsPage(Tk):
 
         self.button = ttk.Button(self.City, text="Create report", command=self.create_city_report)
         self.button.grid(row=2, column=1)
-        ###########################
+        #################################
 
-        ########## ID Tab #########
+        ######### Location Tab ##########
+        self.SelectCity = StringVar()
+        self.SelectLocation = StringVar()
+
+        self.City_Message = Label(self.Location, text="Choose which city data you need")
+        self.City_Message.place(x=5, y=2)
+        self.City_Message.config(font=('Lato', 14,))
+
+        self.CitySelect = ttk.Combobox(self.Location, width=25, textvariable=self.SelectCity)
+        self.CitySelect.set('Choose city')
+        self.CitySelect['values'] = Database.Covid19DB.sheetnames
+        self.CitySelect.place(x=5, y=35)
+
+        self.button = ttk.Button(self.Location, text="Create report", command=self.ReportByLocation)
+        self.button.place(x=190, y=33)
+
+        self.locationLabel = Label(self.Location, text="Location:")
+        self.locationLabel.config(font=('Lato', 12,))
+        self.locationLabel.place(x=2, y=66)
+
+        self.HotelButton = Radiobutton(self.Location, text="Hotel", value="Hotel", variable=self.SelectLocation)
+        self.HotelButton.place(x=100, y=66)
+        self.HotelButton.configure(font=('Lato', 12))
+
+        self.HomeButton = Radiobutton(self.Location, text="Home", value="Home", variable=self.SelectLocation)
+        self.HomeButton.place(x=180, y=66)
+        self.HomeButton.configure(font=('Lato', 12))
+
+        self.HospitalButton = Radiobutton(self.Location, text="Hospital", value="Hospital",
+                                          variable=self.SelectLocation)
+        self.HospitalButton.place(x=260, y=66)
+        self.HospitalButton.configure(font=('Lato', 12))
+
+        #################################
+
+        ############# ID Tab ############
         self.iD = IntVar()
         self.idCity = StringVar()
         CitySheets = list(Database.Covid19DB.sheetnames)
@@ -84,9 +122,9 @@ class ReportsPage(Tk):
 
         self.idButton = ttk.Button(self.ID, text="Confirm", command=self.ReportByID)
         self.idButton.grid(row=2, column=1)
-        ###########################
+        #################################
 
-        ########## Name Tab #########
+        ############ Name Tab ###########
         self.FirstName = StringVar()
         self.LastName = StringVar()
         self.SelectedCity = StringVar()
@@ -111,6 +149,7 @@ class ReportsPage(Tk):
 
         self.PatientButton = ttk.Button(self.Name, text="Confirm", command=self.ReportByName)
         self.PatientButton.grid(row=5, column=0)
+        #################################
 
     def create_CityAndOption_report(self):
         r = 0
@@ -132,6 +171,32 @@ class ReportsPage(Tk):
         for column in range(2, 14):
             self.CityResult = Label(self, text=(Database.city_sheet.cell(row=1, column=column).value, ':',
                                                 Database.city_sheet.cell(row=city_row, column=column).value)).pack()
+
+    def ReportByLocation(self):
+        citySheet = Database.Covid19DB[self.SelectCity.get()]
+        Location = self.SelectLocation.get()
+
+        def switch(option):
+            switcher = {
+                1: 'Firstname:',
+                2: 'Lastname:',
+                3: 'Sex:',
+                4: 'ID:',
+                5: 'Birth date:',
+                6: 'Test date:',
+                7: 'Patient Status:',
+                8: 'Quarantined:'
+            }
+            return switcher[option]
+
+        for ROW in range(1, 28):
+            if citySheet.cell(row=ROW, column=9).value == Location:
+                self.StartBarrier = Label(self.Location, text="----------------------------------------").pack()
+                for Column in range(1, 9):
+                    self.Data = Label(self.Location, text="{0} {1}".format(switch(Column),
+                                                                           citySheet.cell(row=ROW,
+                                                                                          column=Column).value)).pack()
+
 
     def ReportByID(self):
         citySheet = Database.Covid19DB[self.idCity.get()]

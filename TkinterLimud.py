@@ -50,9 +50,9 @@ class Page(Tk):
 
     def RadioButton(self):
         self.radioVar = StringVar()
-        self.radio1 = Radiobutton(self.Tab2, text="First", value="One", textvariable=self.radioVar)
+        self.radio1 = Radiobutton(self.Tab2, text="First", value="One", variable=self.radioVar)
         self.radio1.grid(row=3, column=0, columnspan=3)
-        self.radio2 = Radiobutton(self.Tab2, text="Second", value="Two", textvariable=self.radioVar, state=DISABLED)
+        self.radio2 = Radiobutton(self.Tab2, text="Second", value="Two", variable=self.radioVar, state=DISABLED)
         self.radio2.grid(row=3, column=1)
         self.radioButton = Button(self.Tab2, text="Select", command=self.RadioEvent)
         self.radioButton.grid(row=4, column=0)

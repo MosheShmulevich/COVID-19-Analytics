@@ -217,6 +217,7 @@ class SaveConfirm(Tk):
         self.destroy()
 
     def ReturnNo(self):
+        Page.PatientNotes.configure(state=NORMAL)
         self.destroy()
 
 Page = PatientPage()
