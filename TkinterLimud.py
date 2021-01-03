@@ -9,6 +9,7 @@ class Page(Tk):
         self.add_tabs()
         self.CreateComboBox()
         self.RadioButton()
+        self.MakeText()
 
     def add_tabs(self):
         self.message1 = StringVar()
@@ -57,6 +58,9 @@ class Page(Tk):
         self.radioButton.grid(row=4, column=0)
         self.radioButton = Button(self.Tab2, text="disable", command=self.disable)
         self.radioButton.grid(row=4, column=1)
+
+    def MakeText(self):
+        self.Text = Text(self.Tab1).grid(row=5, column=0)
     def PrintMessage1(self):
         self.LabelMessage1 = Label(self.Tab1, text=self.message1.get()).place(x=150, y=120)
 

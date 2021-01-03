@@ -43,7 +43,7 @@ class RegisterWindow(Tk):
         self.button = ttk.Button(self, text="Sign up", command=self.Register)
         self.button.place(x=220, y=80)
 
-        self.Message = ttk.Label(self, text='')
+        self.Message = Label(self, text='')
         self.Message.place(x=30, y=155)
         self.Message.configure(background='goldenrod')
 

@@ -30,7 +30,7 @@ class NotesPage(Tk):
         self.SubjectBox.grid(row=4, column=0, columnspan=20)
 
         self.MessageLabel = Label(self.Tab1, text="Message").grid(row=5, column=0)
-        self.MessageBox = Entry(self.Tab1, textvariable=self.Message)
+        self.MessageBox = Text(self.Tab1)
         self.MessageBox.place(x=2, y=110, width=400, height=100)
 
         self.SubmitButton = Button(self.Tab1, text="Submit", command=self.SubmitCommand)
@@ -40,7 +40,10 @@ class NotesPage(Tk):
         self.ThanksMessage = Label(self.Tab1, text="Thank you  for your note").place(x=200, y=10)
         self.NameBox.delete(0, END)
         self.SubjectBox.delete(0, END)
-        self.MessageBox.delete(0, END)
+        self.MessageBox.delete("1.0", END)
+
+
+
 
 
 Page = NotesPage()
