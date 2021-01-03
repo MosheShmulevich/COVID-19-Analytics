@@ -104,7 +104,7 @@ class AddPage(Tk):
         self.confirm = Button(self.Tab1, text="Confirm", command=self.enable)
         self.confirm.grid(row=11, column=2)
 
-        self.add_patient = Button(self.Tab1, text='Add Patient', command=self.AssignData)
+        self.add_patient = Button(self.Tab1, text='Add Patient', command=self.Confirm)
         self.add_patient.grid(row=13, column=4)
 
         self.Location = Label(self.Tab1, text="Where is the patient quarantined?")
@@ -129,6 +129,9 @@ class AddPage(Tk):
             self.QuarantineHome.configure(state=DISABLED)
             self.QuarantineHotel.configure(state=DISABLED)
             self.QuarantineHospital.configure(state=DISABLED)
+
+    def Confirm(self):
+        DoubleCheck = ConfirmMessage()
 
     def AssignData(self):
         self.BirthDate = datetime.strptime((str(self.birth_Day.get()) + "/" + str(self.birth_Month.get()) + "/" +
@@ -157,13 +160,14 @@ class AddPage(Tk):
                     6: 'Test date',
                     7: 'Patient Status',
                     8: 'Quarantined',
-                    9: 'Where quarantined'
+                    9: 'Where quarantined',
+                    10: 'Notes'
                 }
                 return switcher
 
             FormatCells(Database.Covid19DB.create_sheet(city))  # creating a new sheet with 'city' name
             citySheet = Database.Covid19DB[city]  # implementing the 'city' sheet into a variable "city_sheet"
-            for colmn in range(1, 9):  # adding to the xlsx table columns, titles
+            for colmn in range(1, 11):  # adding to the xlsx table columns, titles
                 citySheet.cell(row=1, column=colmn).value = SwitchTitle(colmn)[colmn]
 
         def switch_input(k):  # function to choose patient's parameters
@@ -195,6 +199,30 @@ class AddPage(Tk):
                     print("Patient added!")
                     return 0
 
+class ConfirmMessage(Tk):
+    def __init__(self):
+        super(ConfirmMessage, self).__init__()
+        self.title("Confirm Message")
+        self.geometry("250x100")
+        self.maxsize(300, 100)
+        self.Confirm()
+
+    def Confirm(self):
+        self.ConfirmMessage = Label(self, text="Add Patient to the Database?")
+        self.ConfirmMessage.pack(side=TOP)
+        self.ConfirmMessage.configure(font=('Lato', 12, 'bold'))
+
+        self.NoButton = ttk.Button(self, text="No", command=self.ReturnNo)
+        self.NoButton.pack(side=LEFT)
+        self.YesButton = ttk.Button(self, text="Yes", command=self.ReturnYes)
+        self.YesButton.pack(side=RIGHT)
+
+    def ReturnYes(self):
+        PatientAdd.AssignData()
+        self.destroy()
+
+    def ReturnNo(self):
+        self.destroy()
 
 PatientAdd = AddPage()
 PatientAdd.mainloop()

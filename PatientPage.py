@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import Database
 import pygame
-from winsound import *
+
 
 
 class PatientPage(Tk):
@@ -22,9 +22,13 @@ class PatientPage(Tk):
         self.MainTab = ttk.Frame(self.Tab_control)
         self.Tab_control.add(self.MainTab, text="Patient Data")
 
+        self.MessagesTab = ttk.Frame(self.Tab_control)
+        self.Tab_control.add(self.MessagesTab, text="Messages for patient")
+
         self.Tab_control.pack(expan=1, fill="both")
 
     def MakeLabels(self):
+        ######################## Main Tab ###########################
         self.Firstname_Label = Label(self.MainTab, text="Firstname:")
         self.Firstname_Label.place(x=50, y=15)
         self.Firstname_Label.configure(font=('Lato', 12, "bold"))
@@ -65,10 +69,50 @@ class PatientPage(Tk):
         self.Notes_Label.place(x=500, y=200)
         self.Notes_Label.configure(font=('Lato', 12, "bold"))
 
+        self.CityLabel = Label(self.MainTab, text="Select Patient's City:")
+        self.CityLabel.configure(font=('Lato', 11, "bold"))
+        self.CityLabel.place(x=445, y=13)
+
+        self.EnterIdLabel = Label(self.MainTab, text="Enter Patient's ID:")
+        self.EnterIdLabel.configure(font=('Lato', 11, "bold"))
+        self.EnterIdLabel.place(x=463, y=43)
+        #############################################################
+
+        ###################### Messages Tab #########################
+        #### Variables ####
+        self.Name = StringVar()
+        self.Phone = StringVar()
+        #################
+        self.name = Label(self.MessagesTab, text="Name:")
+        self.name.configure(font=("Arial", 11, 'bold'))
+        self.name.place(x=15, y=20)
+
+        self.nameEntry = ttk.Entry(self.MessagesTab, width=25, textvariable=self.Name)
+        self.nameEntry.place(x=19, y=45)
+
+        self.phone = Label(self.MessagesTab, text="Phone number:")
+        self.phone.configure(font=("Arial", 11, 'bold'))
+        self.phone.place(x=15, y=70)
+
+        self.phoneEntry = ttk.Entry(self.MessagesTab, width=25, textvariable=self.Phone)
+        self.phoneEntry.place(x=19, y=95)
+
+        self.messageLabel = Label(self.MessagesTab, text="Message:")
+        self.messageLabel.configure(font=("Arial", 11, 'bold'))
+        self.messageLabel.place(x=15, y=140)
+
+        self.message = Text(self.MessagesTab)
+        self.message.place(x=19, y=165, width=400, height=300)
+        self.message.configure(font=('Arial', 12))
+
+        self.PostButton = ttk.Button(self.MessagesTab, width=16, text="Send message")
+        self.PostButton.place(x=19, y=480)
     def MakeInterface(self):
+        ######################## Main Tab ###########################
+        #### Variables ####
         self.City = StringVar()
         self.ID = IntVar()
-
+        ###################
         self.CityCombo = ttk.Combobox(self.MainTab, width=10, textvariable=self.City)
         self.CityCombo.place(x=600, y=15)
         self.CityCombo['values'] = Database.Covid19DB.sheetnames
@@ -87,6 +131,7 @@ class PatientPage(Tk):
 
         self.SaveNotes = Button(self.MainTab, width=9, text="Save", command=self.save)
         self.SaveNotes.place(x=910, y=260)
+        #############################################################
 
     def get_Data(self):
         citySheet = Database.Covid19DB[self.City.get()]
@@ -155,7 +200,7 @@ class SaveConfirm(Tk):
 
     def Confirm(self):
         pygame.mixer.init()
-        pygame.mixer.music.load("are-you-sure-about-that.mp3")    # For fun
+        pygame.mixer.music.load("ConfirmSoundFX.mp3")    # For fun
         pygame.mixer.music.play()
         self.ConfirmMessage = Label(self, text="Are you sure about that?")
         self.ConfirmMessage.pack(side=TOP)

@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-
+import pygame
 
 class NotesPage(Tk):
     def __init__(self):
@@ -49,6 +49,9 @@ class NewWindow(Tk):
         self.Confirm()
 
     def Confirm(self):
+        pygame.mixer.init()
+        pygame.mixer.music.load("FunnySound.mp3")
+        pygame.mixer.music.play()
         self.ConfirmMessage = Label(self, text="Are you sure about that?")
         self.ConfirmMessage.pack(side=TOP)
         self.ConfirmMessage.configure(font=('Lato', 12, 'bold'))
