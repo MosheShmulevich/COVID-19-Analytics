@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 class Page(Tk):
     def __init__(self):
@@ -7,9 +8,10 @@ class Page(Tk):
         self.title("This is Page")
         self.minsize(480, 250)
         self.add_tabs()
+        self.add_interface()
         self.CreateComboBox()
         self.RadioButton()
-        self.MakeText()
+
 
     def add_tabs(self):
         self.message1 = StringVar()
@@ -24,7 +26,7 @@ class Page(Tk):
         self.tab_control.add(self.Tab2, text="Tab2 is this")
 
         self.tab_control.pack(expan=1, fill="both")
-
+    def add_interface(self):
         self.labelTab1 = Label(self.Tab1, text="Hello world").grid(row=0, column=0)
         self.labelTab2 = Label(self.Tab2, text="Hello mishu").grid(row=0, column=0)
 
@@ -39,6 +41,8 @@ class Page(Tk):
         self.MessageButton = ttk.Button(self.Tab1, text="This is Button", command=self.PrintMessage2)
         self.MessageButton.grid(row=2, column=1)
 
+        self.MessageBoxButton = Button(self.Tab1, text="MessageBox", width=20, command=self.MakeMessagebox)
+        self.MessageBoxButton.grid(row=3, column=0)
     def CreateComboBox(self):
         self.ComboBoxVar = IntVar()
         self.combos = ttk.Combobox(self.Tab2, width=6, textvariable=self.ComboBoxVar)
@@ -59,8 +63,6 @@ class Page(Tk):
         self.radioButton = Button(self.Tab2, text="disable", command=self.disable)
         self.radioButton.grid(row=4, column=1)
 
-    def MakeText(self):
-        self.Text = Text(self.Tab1).grid(row=5, column=0)
     def PrintMessage1(self):
         self.LabelMessage1 = Label(self.Tab1, text=self.message1.get()).place(x=150, y=120)
 
@@ -75,6 +77,9 @@ class Page(Tk):
         self.radio2.configure(state=NORMAL)
     def disable(self):
         self.radio2.configure(state=DISABLED)
+
+    def MakeMessagebox(self):
+        messagebox.showinfo("Report", "This is a test")
 
 page = Page()
 page.mainloop()

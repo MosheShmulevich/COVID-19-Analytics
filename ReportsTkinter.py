@@ -1,6 +1,7 @@
 import Database
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 
 class ReportsPage(Tk):
@@ -47,7 +48,8 @@ class ReportsPage(Tk):
         self.combobox['values'] = FilterList
         self.combobox.grid(row=2, column=0)
 
-        self.button = ttk.Button(self.Category, text="Create report", command=self.create_CityAndOption_report)
+        self.button = ttk.Button(self.Category, text="Create report",
+                                 command=self.create_CityAndOption_report_MessageBox)
         self.button.grid(row=2, column=1)
         #################################
 
@@ -151,26 +153,41 @@ class ReportsPage(Tk):
         self.PatientButton.grid(row=5, column=0)
         #################################
 
-    def create_CityAndOption_report(self):
-        r = 0
-        c = 0
-        for row in range(2, 100):
-            for column in range(2, 14):
-                if Database.city_sheet.cell(row=1, column=column).value == self.option.get():
-                    self.Result = Label(self, text=(Database.city_sheet.cell(row=row, column=1).value, ':',
-                                                    Database.city_sheet.cell(row=row, column=column).value)).pack()
-                    c += 1
-                r += 1
+    def create_CityAndOption_report_MessageBox(self):
+        CitiesDict = {}
+        Row = 2
+        while Database.MainSheet.cell(row=Row, column=1).value is not None:
+            for Column in range(2, 14):
+                if Database.MainSheet.cell(row=1, column=Column).value == self.option.get():
+                    City = Database.MainSheet.cell(row=Row, column=1).value
+                    CitiesDict[City] = Database.MainSheet.cell(row=Row, column=Column).value
+            Row += 1
+        Text = ""
+        for pair in CitiesDict:
+            Text += "{0} : {1}\n".format(pair, CitiesDict[pair])
+        messagebox.showinfo("Cities Report", Text)
 
     def create_city_report(self):
-        city_row = 1
-        for row in range(2, 100):
-            if Database.city_sheet.cell(row=row, column=1).value == self.city.get():
-                city_row = row
-        self.City = Label(self, text=Database.city_sheet.cell(row=city_row, column=1).value).pack()
-        for column in range(2, 14):
-            self.CityResult = Label(self, text=(Database.city_sheet.cell(row=1, column=column).value, ':',
-                                                Database.city_sheet.cell(row=city_row, column=column).value)).pack()
+        CityDict = {}
+        city_row = None
+        City = self.city.get()
+        Row = 2
+        while Database.MainSheet.cell(row=Row, column=1).value is not None:
+            if Database.MainSheet.cell(row=Row, column=1).value == City:
+                city_row = Row
+                for Column in range(2, 14):
+                    if Column in (10, 11, 12):
+                        CityDict[Database.MainSheet.cell(row=1, column=Column).value] = \
+                            int(Database.MainSheet.cell(row=city_row, column=Column).value)
+                    else:
+                        CityDict[Database.MainSheet.cell(row=1, column=Column).value] = \
+                            Database.MainSheet.cell(row=city_row, column=Column).value
+            Row += 1
+
+        Text = "{0}\n".format(Database.MainSheet.cell(row=city_row, column=1).value)
+        for pair in CityDict:
+            Text += "{0} : {1}\n".format(pair, CityDict[pair])
+        messagebox.showinfo("City {0} Report".format(City), Text)
 
     def ReportByLocation(self):
         citySheet = Database.Covid19DB[self.SelectCity.get()]
@@ -196,7 +213,6 @@ class ReportsPage(Tk):
                     self.Data = Label(self.Location, text="{0} {1}".format(switch(Column),
                                                                            citySheet.cell(row=ROW,
                                                                                           column=Column).value)).pack()
-
 
     def ReportByID(self):
         citySheet = Database.Covid19DB[self.idCity.get()]
