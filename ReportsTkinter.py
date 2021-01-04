@@ -39,12 +39,12 @@ class ReportsPage(Tk):
         self.Message.config(font=('Lato', 14,))
 
         self.option = StringVar()
+        FilterList = []
+        for Column in range(2, 14):
+            FilterList += [Database.MainSheet.cell(row=1, column=Column).value]
         self.combobox = ttk.Combobox(self.Category, width=25, textvariable=self.option)
         self.combobox.set('Choose option')
-        self.combobox['values'] = ("Total Cases", "New Cases", "Active Cases", "Total Deaths", "New Deaths", "Total "
-                                                                                                             "Recovered",
-                                   "New Recovered", "Total Tests", "Cases to 1M Population", "Tests to 1M Population",
-                                   "Deaths to 1M Population", "Population")
+        self.combobox['values'] = FilterList
         self.combobox.grid(row=2, column=0)
 
         self.button = ttk.Button(self.Category, text="Create report", command=self.create_CityAndOption_report)
@@ -76,7 +76,7 @@ class ReportsPage(Tk):
 
         self.CitySelect = ttk.Combobox(self.Location, width=25, textvariable=self.SelectCity)
         self.CitySelect.set('Choose city')
-        self.CitySelect['values'] = Database.Covid19DB.sheetnames
+        self.CitySelect['values'] = Database.Covid19DB.sheetnames[1:99]
         self.CitySelect.place(x=5, y=35)
 
         self.button = ttk.Button(self.Location, text="Create report", command=self.ReportByLocation)
@@ -112,7 +112,7 @@ class ReportsPage(Tk):
         self.cityComboBox = ttk.Combobox(self.ID, width=7, textvariable=self.idCity)
         self.cityComboBox.grid(row=0, column=1)
         self.cityComboBox.set("City")
-        self.cityComboBox['values'] = CitySheets
+        self.cityComboBox['values'] = CitySheets[1:99]
 
         self.idMessage = Label(self.ID, text="Enter ID")
         self.idMessage.grid(row=1, column=0)
@@ -135,7 +135,7 @@ class ReportsPage(Tk):
         self.cityComboBox = ttk.Combobox(self.Name, width=7, textvariable=self.SelectedCity)
         self.cityComboBox.grid(row=0, column=1)
         self.cityComboBox.set("City")
-        self.cityComboBox['values'] = CitySheets
+        self.cityComboBox['values'] = CitySheets[1:99]
 
         self.Firstname_Message = Label(self.Name, text="Enter Firstname")
         self.Firstname_Message.grid(row=1, column=0)
