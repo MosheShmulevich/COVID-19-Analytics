@@ -12,6 +12,6 @@ userSheet = userDb['users']  # UserDatabase users sheet
 def InsertListToDB():  # Adding cities from Israel city list.xlsx file as a list
     row = 2
     for city in IL_CityList:
-        city_sheet.cell(row=row, column=1).value = city
+        MainSheet.cell(row=row, column=1).value = city
         row += 1
     Covid19DB.save('Database.xlsx')
