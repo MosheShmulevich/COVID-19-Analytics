@@ -224,5 +224,5 @@ class ConfirmMessage(Tk):
     def ReturnNo(self):
         self.destroy()
 
-PatientAdd = AddPage()
-PatientAdd.mainloop()
+# PatientAdd = AddPage()
+# PatientAdd.mainloop()

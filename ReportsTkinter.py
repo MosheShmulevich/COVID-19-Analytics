@@ -342,5 +342,5 @@ class ReportsPage(Tk):
         self.WhereQuaran.place(x=240, y=405)
 
 
-Reports = ReportsPage()
-Reports.mainloop()
+# Reports = ReportsPage()
+# Reports.mainloop()

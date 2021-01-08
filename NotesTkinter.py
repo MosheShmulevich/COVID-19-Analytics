@@ -68,6 +68,6 @@ class NewWindow(Tk):
     def ReturnNo(self):
         self.destroy()
 
-
-Page = NotesPage()
-Page.mainloop()
+#
+# Page = NotesPage()
+# Page.mainloop()
