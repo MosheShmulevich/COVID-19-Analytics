@@ -1,7 +1,7 @@
 import Database
 from tkinter import *
-from tkinter import ttk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
+from datetime import datetime, date
 
 
 class ReportsPage(Tk):
@@ -72,6 +72,12 @@ class ReportsPage(Tk):
         self.SelectCity = StringVar()
         self.SelectLocation = StringVar()
 
+        self.Data = Text(self.Location, state=DISABLED, font=(12))
+        self.Data.place(x=500, y=20, width=600, height=500)
+
+        self.DataScroll = ttk.Scrollbar(self.Location, orient="vertical", command=self.Data.yview)
+        self.DataScroll.place(x=1100, y=20, height=500)
+
         self.City_Message = Label(self.Location, text="Choose which city data you need")
         self.City_Message.place(x=5, y=2)
         self.City_Message.config(font=('Lato', 14,))
@@ -83,6 +89,9 @@ class ReportsPage(Tk):
 
         self.button = ttk.Button(self.Location, text="Create report", command=self.ReportByLocation)
         self.button.place(x=190, y=33)
+
+        self.ClearButton = Button(self.Location, text="Clear data", command=self.Clear)
+        self.ClearButton.place(x=10, y=100, width=100)
 
         self.locationLabel = Label(self.Location, text="Location:")
         self.locationLabel.config(font=('Lato', 12,))
@@ -153,6 +162,11 @@ class ReportsPage(Tk):
         self.PatientButton.grid(row=5, column=0)
         #################################
 
+    def Clear(self):
+        self.Data.configure(state=NORMAL)
+        self.Data.delete(1.0, END)
+        self.Data.configure(state=DISABLED)
+
     def create_CityAndOption_report_MessageBox(self):
         CitiesDict = {}
         Row = 2
@@ -190,9 +204,11 @@ class ReportsPage(Tk):
         messagebox.showinfo("City {0} Report".format(City), Text)
 
     def ReportByLocation(self):
+        if len(self.Data.get("1.0", "end-1c")) != 0:
+            self.Clear()
+        self.Data.configure(state=NORMAL)
         citySheet = Database.Covid19DB[self.SelectCity.get()]
         Location = self.SelectLocation.get()
-
         def switch(option):
             switcher = {
                 1: 'Firstname:',
@@ -208,11 +224,20 @@ class ReportsPage(Tk):
 
         for ROW in range(1, 28):
             if citySheet.cell(row=ROW, column=9).value == Location:
-                self.StartBarrier = Label(self.Location, text="----------------------------------------").pack()
+                self.Data.insert(INSERT, "-------------------------------\n")  #seperator
                 for Column in range(1, 9):
-                    self.Data = Label(self.Location, text="{0} {1}".format(switch(Column),
-                                                                           citySheet.cell(row=ROW,
-                                                                                          column=Column).value)).pack()
+                    if Column in (5, 6):
+                        self.Date = date
+                        self.Date = datetime.strptime(str(citySheet.cell(row=ROW,
+                                                                    column=Column).value), '%Y-%m-%d %H:%M:%S').date()
+                        self.Data.insert(INSERT, "{0} {1}\n".format(switch(Column), self.Date))
+                    else:
+                        self.Data.insert(INSERT, "{0} {1}\n".format(switch(Column),
+                                                                               citySheet.cell(row=ROW,
+                                                                                              column=Column).value))
+        self.DataScroll.config(command=self.Data.yview)
+        self.Data.config(yscrollcommand = self.DataScroll.set)
+        self.Data.configure(state=DISABLED)
 
     def ReportByID(self):
         citySheet = Database.Covid19DB[self.idCity.get()]
@@ -225,40 +250,42 @@ class ReportsPage(Tk):
             self.NoPatient = Label(self.ID, text="Patient with such id do not exist in the system!").place(x=500, y=500)
             return 1
 
-        self.firstname = Label(self.ID, text=("Firstname:", citySheet.cell(row=PatientRow, column=1).value))
-        self.firstname.config(font=('Lato', 11))
+        self.firstname = Label(self.ID, text=("Firstname:", citySheet.cell(row=PatientRow,
+                                                                           column=1).value), font=('Lato', 11))
         self.firstname.place(x=240, y=45)
 
-        self.lastname = Label(self.ID, text=("Lastname:", citySheet.cell(row=PatientRow, column=2).value))
-        self.lastname.config(font=('Lato', 11))
+        self.lastname = Label(self.ID, text=("Lastname:", citySheet.cell(row=PatientRow,
+                                                                         column=2).value), font=('Lato', 11))
         self.lastname.place(x=240, y=90)
 
-        self.id = Label(self.ID, text=("Sex:", citySheet.cell(row=PatientRow, column=3).value))
-        self.id.config(font=('Lato', 11))
-        self.id.place(x=240, y=135)
+        self.sex = Label(self.ID, text=("Sex:", citySheet.cell(row=PatientRow, column=3).value), font=('Lato', 11))
+        self.sex.place(x=240, y=135)
 
-        self.id = Label(self.ID, text=("ID:", citySheet.cell(row=PatientRow, column=4).value))
-        self.id.config(font=('Lato', 11))
+        self.id = Label(self.ID, text=("ID:", citySheet.cell(row=PatientRow, column=4).value), font=('Lato', 11))
         self.id.place(x=240, y=180)
 
-        self.bDay = Label(self.ID, text=("Date of birth:", citySheet.cell(row=PatientRow, column=5).value))
-        self.bDay.config(font=('Lato', 11))
+        self.DateOfBirth = date
+        self.DateOfBirth = datetime.strptime(str(citySheet.cell(row=PatientRow, column=5).value),
+                                             '%Y-%m-%d %H:%M:%S').date()
+        self.bDay = Label(self.ID, text=("Date of birth: {0}".format(self.DateOfBirth)), font=('Lato', 11))
         self.bDay.place(x=240, y=225)
 
-        self.testDay = Label(self.ID, text=("Test Date:", citySheet.cell(row=PatientRow, column=6).value))
-        self.testDay.config(font=('Lato', 11))
+        self.DateOfTest = date
+        self.DateOfTest = datetime.strptime(str(citySheet.cell(row=PatientRow, column=6).value),
+                                            '%Y-%m-%d %H:%M:%S').date()
+        self.testDay = Label(self.ID, text=("Test Date: {0}".format(self.DateOfTest)), font=('Lato', 11))
         self.testDay.place(x=240, y=270)
 
-        self.status = Label(self.ID, text=("Patient Status:", citySheet.cell(row=PatientRow, column=7).value))
-        self.status.config(font=('Lato', 11))
+        self.status = Label(self.ID, text=("Patient Status: {0}".format(citySheet.cell(row=PatientRow,
+                                                                                column=7).value)), font=('Lato', 11))
         self.status.place(x=240, y=315)
 
-        self.Quaran = Label(self.ID, text=("In Quarantine?:", citySheet.cell(row=PatientRow, column=8).value))
-        self.Quaran.config(font=('Lato', 11))
+        self.Quaran = Label(self.ID, text=("In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
+                                                                                column=8).value)), font=('Lato', 11))
         self.Quaran.place(x=240, y=360)
 
-        self.WhereQuaran = Label(self.ID, text=("Where In Quarantine?", citySheet.cell(row=PatientRow, column=9).value))
-        self.WhereQuaran.config(font=('Lato', 11))
+        self.WhereQuaran = Label(self.ID, text=("Where In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
+                                                                                column=9).value)), font=('Lato', 11))
         self.WhereQuaran.place(x=240, y=405)
 
     def ReportByName(self):
@@ -275,41 +302,43 @@ class ReportsPage(Tk):
                                                                                                              y=500)
             return 1
 
-        self.firstname = Label(self.Name, text=("Firstname:", citySheet.cell(row=PatientRow, column=1).value))
-        self.firstname.config(font=('Lato', 11))
+        self.firstname = Label(self.Name, text=("Firstname:", citySheet.cell(row=PatientRow,
+                                                                             column=1).value), font=('Lato', 11))
         self.firstname.place(x=240, y=45)
 
-        self.lastname = Label(self.Name, text=("Lastname:", citySheet.cell(row=PatientRow, column=2).value))
-        self.lastname.config(font=('Lato', 11))
+        self.lastname = Label(self.Name, text=("Lastname:", citySheet.cell(row=PatientRow,
+                                                                           column=2).value), font=('Lato', 11))
         self.lastname.place(x=240, y=90)
 
-        self.id = Label(self.ID, text=("Sex:", citySheet.cell(row=PatientRow, column=3).value))
-        self.id.config(font=('Lato', 11))
-        self.id.place(x=240, y=135)
+        self.sex = Label(self.Name, text=("Sex:", citySheet.cell(row=PatientRow, column=3).value), font=('Lato', 11))
+        self.sex.place(x=240, y=135)
 
-        self.id = Label(self.Name, text=("ID:", citySheet.cell(row=PatientRow, column=4).value))
-        self.id.config(font=('Lato', 11))
+        self.id = Label(self.Name, text=("ID:", citySheet.cell(row=PatientRow, column=4).value), font=('Lato', 11))
         self.id.place(x=240, y=180)
 
-        self.bDay = Label(self.Name, text=("Date of birth:", citySheet.cell(row=PatientRow, column=5).value))
-        self.bDay.config(font=('Lato', 11))
+        self.DateOfBirth = date
+        self.DateOfBirth = datetime.strptime(str(citySheet.cell(row=PatientRow,
+                                                                column=5).value), '%Y-%m-%d %H:%M:%S').date()
+        self.bDay = Label(self.Name, text=("Date of birth: {0}".format(self.DateOfBirth)), font=('Lato', 11))
         self.bDay.place(x=240, y=225)
 
-        self.testDay = Label(self.Name, text=("Test Date:", citySheet.cell(row=PatientRow, column=6).value))
-        self.testDay.config(font=('Lato', 11))
+        self.DateOfTest = date
+        self.DateOfTest = datetime.strptime(str(citySheet.cell(row=PatientRow,
+                                                               column=6).value), '%Y-%m-%d %H:%M:%S').date()
+        self.testDay = Label(self.Name, text=("Test Date: {0}".format(self.DateOfTest)), font=('Lato', 11))
         self.testDay.place(x=240, y=270)
 
-        self.status = Label(self.Name, text=("Patient Status:", citySheet.cell(row=PatientRow, column=7).value))
-        self.status.config(font=('Lato', 11))
+        self.status = Label(self.Name, text=("Patient Status: {0}".format(citySheet.cell(row=PatientRow,
+                                                                                column=7).value)), font=('Lato', 11))
         self.status.place(x=240, y=315)
 
-        self.Quaran = Label(self.Name, text=("In Quarantine?:", citySheet.cell(row=PatientRow, column=8).value))
-        self.Quaran.config(font=('Lato', 11))
+        self.Quaran = Label(self.Name, text=("In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
+                                                                                column=8).value)), font=('Lato', 11))
         self.Quaran.place(x=240, y=360)
 
         self.WhereQuaran = Label(self.Name,
-                                 text=("Where In Quarantine?", citySheet.cell(row=PatientRow, column=9).value))
-        self.WhereQuaran.config(font=('Lato', 11))
+                                 text=("Where In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
+                                                                                column=9).value)), font=('Lato', 11))
         self.WhereQuaran.place(x=240, y=405)
 
 
