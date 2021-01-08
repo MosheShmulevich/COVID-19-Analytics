@@ -1,6 +1,7 @@
 import Database
 from tkinter import *
 from tkinter import ttk
+from PIL import ImageTk, Image
 
 
 
@@ -8,7 +9,7 @@ class RegisterWindow(Tk):
     def __init__(self):
         super(RegisterWindow, self).__init__()
         self.title("User Registration Page")
-        self.minsize(320, 180)
+        self.geometry("450x300")
         self.wm_iconbitmap("Logo.ico")
         self.configure(bg='goldenrod')
         self.create_UsertextBox()
@@ -18,34 +19,41 @@ class RegisterWindow(Tk):
         self.password = StringVar()
         self.email = StringVar()
 
+        self.IMG = ImageTk.PhotoImage(Image.open("Logo.jpg"))
+        self.Label = Label(image=self.IMG, bg="goldenrod")
+        self.Label.pack()
+
+
+
         self.label_user = ttk.Label(self, text="Username: ")
-        self.label_user.place(x=90, y=15)
+        self.label_user.pack()
         self.label_user.configure(background='goldenrod')
 
         self.user = ttk.Entry(self, width=20, textvariable=self.username)
-        self.user.place(x=60, y=35)
+        self.user.pack()
         self.user.focus()
 
         self.label_pswrd = ttk.Label(self, text="Password: ")
-        self.label_pswrd.place(x=90, y=60)
+        self.label_pswrd.pack()
         self.label_pswrd.configure(background='goldenrod')
 
         self.pswrd = ttk.Entry(self, width=20, textvariable=self.password)
-        self.pswrd.place(x=60, y=80)
+        self.pswrd.pack()
 
         self.label_email = ttk.Label(self, text="Email: ")
-        self.label_email.place(x=100, y=105)
+        self.label_email.pack()
         self.label_email.configure(background='goldenrod')
 
         self.Email = ttk.Entry(self, width=20, textvariable=self.email)
-        self.Email.place(x=60, y=125)
+        self.Email.pack()
 
         self.button = ttk.Button(self, text="Sign up", command=self.Register)
-        self.button.place(x=220, y=80)
+        self.button.pack()
 
         self.Message = Label(self, text='')
-        self.Message.place(x=30, y=155)
+        self.Message.pack()
         self.Message.configure(background='goldenrod')
+
 
     def Register(self):
         TryCounter = 0
@@ -75,7 +83,7 @@ class RegisterWindow(Tk):
                         Database.userSheet.cell(row=row, column=3).value = self.email.get()
                         Database.userDb.save('UserDatabase.xlsx')
                         self.Message = ttk.Label(self, text="Thank you for your registration!")
-                        self.Message.place(x=30, y=155)
+                        self.Message.pack()
                         return 1
                     else:
                         continue
