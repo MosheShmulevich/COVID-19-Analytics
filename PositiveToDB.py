@@ -211,17 +211,52 @@ class AddTestPage(Tk):
                     return 0
 
     def PositiveToMainDB(self):
+        def CreateNewSheet(city):  # function for creating a new 'city' sheet in xlsx database
+            def FormatCells(city_sheet):  # function for formatting the date and id cells according to the data
+                for row in range(2, 400):
+                    for column in range(4, 7):
+                        cell = city_sheet.cell(row, column)
+                        if column == 5 or column == 6:
+                            cell.number_format = "DD-MM-YYYY"
+                        elif column == 4:
+                            cell.number_format = "0"
+                Database.Covid19DB.save('Database.xlsx')
+
+            def SwitchTitle(column):  # function for adding to the xlsx table columns, titles
+                switcher = {
+                    1: 'Firstname',
+                    2: 'Lastname',
+                    3: 'Sex',
+                    4: 'ID',
+                    5: 'Birth date',
+                    6: 'Test date',
+                    7: 'Patient Status',
+                    8: 'Quarantined',
+                    9: 'Where quarantined',
+                    10: 'Notes'
+                }
+                return switcher
+
+            FormatCells(Database.Covid19DB.create_sheet(city))  # creating a new sheet with 'city' name
+            citySheet = Database.Covid19DB[city]  # implementing the 'city' sheet into a variable "city_sheet"
+            for colmn in range(1, 11):  # adding to the xlsx table columns, titles
+                citySheet.cell(row=1, column=colmn).value = SwitchTitle(colmn)[colmn]
+            Database.Covid19DB.save('Database.xlsx')
+
         CitiesList = Database.ResultDB.sheetnames
         print(CitiesList)
         for City in CitiesList:
+            if City not in Database.Covid19DB.sheetnames:
+                CreateNewSheet(City)
             IdList = []
             CheckRow = 2
             while Database.Covid19DB[City].cell(row=CheckRow, column=4).value is not None:
                 IdList += [Database.Covid19DB[City].cell(row=CheckRow, column=4).value, ]
                 CheckRow += 1
             print(IdList)
-            for Row in range(2, 400):
-                if Database.ResultDB[City].cell(row=Row, column=7).value is 'Positive':
+            for Row in range(2, 20):
+                print(Database.ResultDB[City].cell(row=Row, column=7).value)
+                if Database.ResultDB[City].cell(row=Row, column=7).value == "Positive":
                     if Database.ResultDB[City].cell(row=Row, column=4).value in IdList:
                         print("Patient already in main database!")
                         continue
@@ -230,9 +265,9 @@ class AddTestPage(Tk):
                     while Database.Covid19DB[City].cell(row=CheckRow, column=1).value is not None:
                         CheckRow += 1
                     for COLUMN in range(1, 11):
-                        Database.Covid19DB[City].cell(row=CheckRow, column=COLUMN).insert = \
+                        Database.Covid19DB[City].cell(row=CheckRow, column=COLUMN).value = \
                             Database.ResultDB[City].cell(row=Row, column=COLUMN).value
-                    Database.Covid19DB.save('Database.xlsx')
+                        Database.Covid19DB.save('Database.xlsx')
 
 
 class ConfirmMessage(Tk):
