@@ -6,7 +6,8 @@ class NotesPage(Tk):
     def __init__(self):
         super(NotesPage, self).__init__()
         self.title("Notes to system")
-        self.minsize(480, 260)
+        self.geometry("480x260")
+        self.resizable(width=False, height=False)
         self.create_tabs()
         self.add_widgets()
 
@@ -68,6 +69,6 @@ class NewWindow(Tk):
     def ReturnNo(self):
         self.destroy()
 
-#
-# Page = NotesPage()
-# Page.mainloop()
+
+Page = NotesPage()
+Page.mainloop()

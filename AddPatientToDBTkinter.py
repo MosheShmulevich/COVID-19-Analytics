@@ -8,15 +8,18 @@ class AddPage(Tk):
     def __init__(self):
         super(AddPage, self).__init__()
         self.title("Add patient to the Database")
-        self.minsize(480, 260)
+        self.geometry("550x320")
+        self.resizable(width=False, height=False)
         # self.wm_iconbitmap("")
         self.create_tabs()
         self.add_widgets()
 
     def create_tabs(self):
         self.tab_control = ttk.Notebook(self)
+
         self.Tab1 = ttk.Frame(self.tab_control)
         self.tab_control.add(self.Tab1, text="Add Patient")
+
         self.tab_control.pack(expan=1, fill="both")
 
     def add_widgets(self):
@@ -104,7 +107,7 @@ class AddPage(Tk):
         self.confirm = Button(self.Tab1, text="Confirm", command=self.enable)
         self.confirm.grid(row=11, column=2)
 
-        self.add_patient = Button(self.Tab1, text='Add Patient', command=self.Confirm)
+        self.add_patient = Button(self.Tab1, text='Add Patient', width=15, command=self.Confirm)
         self.add_patient.grid(row=13, column=4)
 
         self.Location = Label(self.Tab1, text="Where is the patient quarantined?")
@@ -118,6 +121,9 @@ class AddPage(Tk):
         self.QuarantineHospital = Radiobutton(self.Tab1, text="Hospital", value="Hospital",
                                               variable=self.WhereQuarntined, state=DISABLED)
         self.QuarantineHospital.grid(row=12, column=2, columnspan=5)
+
+        self.exitButton = Button(self.Tab1, text="Exit", width=15, command=self.quit)
+        self.exitButton.grid(row=13, column=0)
         ############################
 
     def enable(self):
@@ -203,8 +209,8 @@ class ConfirmMessage(Tk):
     def __init__(self):
         super(ConfirmMessage, self).__init__()
         self.title("Confirm Message")
-        self.geometry("250x100")
-        self.maxsize(300, 100)
+        self.geometry("300x100")
+        self.resizable(width=False, height=False)
         self.Confirm()
 
     def Confirm(self):
@@ -224,5 +230,5 @@ class ConfirmMessage(Tk):
     def ReturnNo(self):
         self.destroy()
 
-# PatientAdd = AddPage()
-# PatientAdd.mainloop()
+PatientAdd = AddPage()
+PatientAdd.mainloop()

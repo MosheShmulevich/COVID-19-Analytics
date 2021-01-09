@@ -9,7 +9,8 @@ class MainPage(Tk):
     def __init__(self):
         super(MainPage, self).__init__()
         self.title("Covid19 Analytics")
-        self.minsize(640, 480)
+        self.geometry("640x480")
+        self.resizable(width=False, height=False)
         self.makeButtons()
 
     def makeButtons(self):

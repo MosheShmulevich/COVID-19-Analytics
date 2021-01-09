@@ -4,12 +4,12 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 
 
-
 class RegisterWindow(Tk):
     def __init__(self):
         super(RegisterWindow, self).__init__()
         self.title("User Registration Page")
         self.geometry("450x300")
+        self.resizable(width=False, height=False)
         self.wm_iconbitmap("Logo.ico")
         self.configure(bg='goldenrod')
         self.create_UsertextBox()
@@ -22,8 +22,6 @@ class RegisterWindow(Tk):
         self.IMG = ImageTk.PhotoImage(Image.open("Logo.jpg"))
         self.Label = Label(image=self.IMG, bg="goldenrod")
         self.Label.pack()
-
-
 
         self.label_user = ttk.Label(self, text="Username: ")
         self.label_user.pack()
@@ -50,30 +48,37 @@ class RegisterWindow(Tk):
         self.button = ttk.Button(self, text="Sign up", command=self.Register)
         self.button.pack()
 
-        self.Message = Label(self, text='')
+
+    def Register(self):
+
+        self.Message = Label(self, text=None)
         self.Message.pack()
         self.Message.configure(background='goldenrod')
 
-
-    def Register(self):
         TryCounter = 0
-        for row in range(2, 35):
-            if self.username.get() == Database.userSheet.cell(row=row, column=1).value:
-                TryCounter += 1
-                self.Message.configure(text="This user name already exist\nlog-in or choose a different "
+        UsernameList = []
+        EmailList = []
+        UsernameROW = 2
+
+        while Database.userSheet.cell(row=UsernameROW, column=1).value is not None:
+            UsernameList += [Database.userSheet.cell(row=UsernameROW, column=1).value,]
+            EmailList += [Database.userSheet.cell(row=UsernameROW, column=3).value,]
+            UsernameROW += 1
+        if self.username.get() in UsernameList:
+            TryCounter += 1
+            self.Message.configure(text="This user name already exist\nlog-in or choose a different "
                                             "username")
-            else:
-                continue
-        for row in range(2, 35):
-            if self.email.get() == Database.userSheet.cell(row=row, column=3).value:
-                TryCounter += 1
-                self.Message.configure(text="This email already exist\nlog-in or choose a different "
-                                            "email")
-            else:
-                continue
-        if TryCounter >=2:
+            self.after(3000, self.Message.destroy)
+            return -1
+        if self.username.get() in EmailList:
+            TryCounter += 1
+            self.Message.configure(text="This email already exist\nlog-in or choose a different "
+                                                    "email")
+            self.after(3000, self.Message.destroy)
+            return -1
+        if TryCounter >= 2:
             self.Message.configure(text="Too many tries,closing the registration page")
-            exit(-1)
+            self.after(2000, self.destroy)
         else:
             for row in range(2, 35):
                 for column in range(1, 2):
@@ -84,10 +89,9 @@ class RegisterWindow(Tk):
                         Database.userDb.save('UserDatabase.xlsx')
                         self.Message = ttk.Label(self, text="Thank you for your registration!")
                         self.Message.pack()
+                        self.Message.after(3000, self.Message.destroy)
                         return 1
-                    else:
-                        continue
 
-
+#
 # Register_Window = RegisterWindow()
 # Register_Window.mainloop()

@@ -10,7 +10,7 @@ class GraphGenerator(Tk):
         super(GraphGenerator, self).__init__()
         self.title("Graph Generator")
         self.geometry("400x200")
-        self.maxsize(400, 200)
+        self.resizable(width=False, height=False)
         self.MakeTabs()
         self.MakeInterface()
 
