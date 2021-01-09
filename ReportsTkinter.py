@@ -4,6 +4,7 @@ from tkinter import ttk, messagebox
 from datetime import datetime, date
 import webbrowser
 
+
 class ReportsPage(Tk):
     def __init__(self):
         super(ReportsPage, self).__init__()
@@ -103,7 +104,7 @@ class ReportsPage(Tk):
         self.button = ttk.Button(self.LocationTab, text="Create report", command=self.ReportByLocation)
         self.button.place(x=190, y=33)
 
-        self.ClearButton = Button(self.LocationTab, text="Clear data", command=self.Clear)
+        self.ClearButton = Button(self.LocationTab, text="Clear data", command=self.ClearLocation)
         self.ClearButton.place(x=10, y=100, width=100)
 
         self.locationLabel = Label(self.LocationTab, text="Location:")
@@ -181,7 +182,7 @@ class ReportsPage(Tk):
         self.PatientButton.grid(row=5, column=0)
         ###################################
 
-        ############ Age Tab #############
+        ############ Age Tab ##############
 
         #### Variables ####
         self.AgeSelected = IntVar()
@@ -193,12 +194,20 @@ class ReportsPage(Tk):
         self.AgeChoose = Spinbox(self.AgeTab, from_=0, to=130, textvariable=self.AgeSelected)
         self.AgeChoose.grid(row=1, column=0)
 
-        self.AgeConfirm = ttk.Button(self.AgeTab, text="Confirm Selection")
+        self.AgeConfirm = ttk.Button(self.AgeTab, text="Confirm Selection", command=self.AgeReport)
+        self.AgeConfirm.grid(row=2, column=0)
 
-        self.AgeMessage = Text(self.AgeTab, state=DISABLED, font=14)
+        self.AgeMessage = Text(self.AgeTab, state=DISABLED, font=('Lato', 11))
         self.AgeMessage.place(x=450, y=20, width=450, height=540)
 
-    def Clear(self):
+        self.AgeMessageScroll = ttk.Scrollbar(self.AgeTab, orient="vertical", command=self.AgeMessage.yview)
+        self.AgeMessageScroll.place(x=900, y=20, height=540)
+
+        self.ClearDataAge = Button(self.AgeTab, text="Clear Data", command=self.ClearAge)
+        self.ClearDataAge.place(x=10, y=80)
+        ####################################
+
+    def ClearLocation(self):
         self.Data.configure(state=NORMAL)
         self.Data.delete(1.0, END)
         self.Data.configure(state=DISABLED)
@@ -244,10 +253,11 @@ class ReportsPage(Tk):
 
     def ReportByLocation(self):
         if len(self.Data.get("1.0", "end-1c")) != 0:
-            self.Clear()
+            self.ClearLocation()
         self.Data.configure(state=NORMAL)
         citySheet = Database.Covid19DB[self.SelectCity.get()]
         Location = self.SelectLocation.get()
+
         def switch(option):
             switcher = {
                 1: 'Firstname:',
@@ -263,19 +273,20 @@ class ReportsPage(Tk):
 
         for ROW in range(1, 28):
             if citySheet.cell(row=ROW, column=9).value == Location:
-                self.Data.insert(INSERT, "-------------------------------\n")  #seperator
+                self.Data.insert(INSERT, "-------------------------------\n")  # seperator
                 for Column in range(1, 9):
                     if Column in (5, 6):
                         self.Date = date
                         self.Date = datetime.strptime(str(citySheet.cell(row=ROW,
-                                                                    column=Column).value), '%Y-%m-%d %H:%M:%S').date()
+                                                                         column=Column).value),
+                                                      '%Y-%m-%d %H:%M:%S').date()
                         self.Data.insert(INSERT, "{0} {1}\n".format(switch(Column), self.Date))
                     else:
                         self.Data.insert(INSERT, "{0} {1}\n".format(switch(Column),
-                                                                               citySheet.cell(row=ROW,
-                                                                                              column=Column).value))
+                                                                    citySheet.cell(row=ROW,
+                                                                                   column=Column).value))
         self.DataScroll.config(command=self.Data.yview)
-        self.Data.config(yscrollcommand = self.DataScroll.set)
+        self.Data.config(yscrollcommand=self.DataScroll.set)
         self.Data.configure(state=DISABLED)
 
     def ReportByID(self):
@@ -286,15 +297,16 @@ class ReportsPage(Tk):
             if citySheet.cell(row=rw, column=4).value == id:
                 PatientRow = rw
         if PatientRow == None:
-            self.NoPatient = Label(self.IDTab, text="Patient with such id do not exist in the system!").place(x=500, y=500)
+            self.NoPatient = Label(self.IDTab, text="Patient with such id do not exist in the system!").place(x=500,
+                                                                                                              y=500)
             return 1
 
         self.firstname = Label(self.IDTab, text=("Firstname:", citySheet.cell(row=PatientRow,
-                                                                           column=1).value), font=('Lato', 11))
+                                                                              column=1).value), font=('Lato', 11))
         self.firstname.place(x=240, y=45)
 
         self.lastname = Label(self.IDTab, text=("Lastname:", citySheet.cell(row=PatientRow,
-                                                                         column=2).value), font=('Lato', 11))
+                                                                            column=2).value), font=('Lato', 11))
         self.lastname.place(x=240, y=90)
 
         self.sex = Label(self.IDTab, text=("Sex:", citySheet.cell(row=PatientRow, column=3).value), font=('Lato', 11))
@@ -316,15 +328,18 @@ class ReportsPage(Tk):
         self.testDay.place(x=240, y=270)
 
         self.status = Label(self.IDTab, text=("Patient Status: {0}".format(citySheet.cell(row=PatientRow,
-                                                                                column=7).value)), font=('Lato', 11))
+                                                                                          column=7).value)),
+                            font=('Lato', 11))
         self.status.place(x=240, y=315)
 
         self.Quaran = Label(self.IDTab, text=("In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
-                                                                                column=8).value)), font=('Lato', 11))
+                                                                                           column=8).value)),
+                            font=('Lato', 11))
         self.Quaran.place(x=240, y=360)
 
         self.WhereQuaran = Label(self.IDTab, text=("Where In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
-                                                                                column=9).value)), font=('Lato', 11))
+                                                                                                      column=9).value)),
+                                 font=('Lato', 11))
         self.WhereQuaran.place(x=240, y=405)
 
     def ReportByName(self):
@@ -338,15 +353,15 @@ class ReportsPage(Tk):
                 PatientRow = rw
         if PatientRow == None:
             self.NoPatient = Label(self.NameTab, text="Patient with such id do not exist in the system!").place(x=500,
-                                                                                                             y=500)
+                                                                                                                y=500)
             return 1
 
         self.firstname = Label(self.NameTab, text=("Firstname:", citySheet.cell(row=PatientRow,
-                                                                             column=1).value), font=('Lato', 11))
+                                                                                column=1).value), font=('Lato', 11))
         self.firstname.place(x=240, y=45)
 
         self.lastname = Label(self.NameTab, text=("Lastname:", citySheet.cell(row=PatientRow,
-                                                                           column=2).value), font=('Lato', 11))
+                                                                              column=2).value), font=('Lato', 11))
         self.lastname.place(x=240, y=90)
 
         self.sex = Label(self.NameTab, text=("Sex:", citySheet.cell(row=PatientRow, column=3).value), font=('Lato', 11))
@@ -368,16 +383,19 @@ class ReportsPage(Tk):
         self.testDay.place(x=240, y=270)
 
         self.status = Label(self.NameTab, text=("Patient Status: {0}".format(citySheet.cell(row=PatientRow,
-                                                                                column=7).value)), font=('Lato', 11))
+                                                                                            column=7).value)),
+                            font=('Lato', 11))
         self.status.place(x=240, y=315)
 
         self.Quaran = Label(self.NameTab, text=("In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
-                                                                                column=8).value)), font=('Lato', 11))
+                                                                                             column=8).value)),
+                            font=('Lato', 11))
         self.Quaran.place(x=240, y=360)
 
         self.WhereQuaran = Label(self.NameTab,
                                  text=("Where In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
-                                                                                column=9).value)), font=('Lato', 11))
+                                                                                          column=9).value)),
+                                 font=('Lato', 11))
         self.WhereQuaran.place(x=240, y=405)
 
     def CalcAge(self):
@@ -395,6 +413,47 @@ class ReportsPage(Tk):
             else:
                 self.AgeDict[Age] = 1
         print(self.AgeDict)
+
+    def ClearAge(self):
+        self.AgeMessage.configure(state=NORMAL)
+        self.AgeMessage.delete(1.0, END)
+        self.AgeMessage.configure(state=DISABLED)
+
+    def AgeReport(self):
+        if len(self.AgeMessage.get("1.0", "end-1c")) != 0:
+            self.ClearAge()
+        CitiesList = Database.Covid19DB.sheetnames[1:-1:1]
+        print("CitiesList:", CitiesList)
+        today = date.today()
+        for City in CitiesList:
+            CitySheet = Database.Covid19DB[City]
+            CheckRow = 2
+            while CitySheet.cell(row=CheckRow, column=5).value is not None:
+                Born = datetime.strptime(str(CitySheet.cell(row=CheckRow, column=5).value), '%Y-%m-%d %H:%M:%S').date()
+                Age = today.year - Born.year - (
+                        (today.month, today.day) < (Born.month, Born.day))
+                print("Age:", Age)
+                print("selected:", self.AgeSelected.get())
+                if Age == self.AgeSelected.get():
+                    self.AgeMessage.config(state=NORMAL)
+                    self.AgeMessage.insert(INSERT, "-------------------------------------------\n")
+                    for COLUMN in range(1, 11):
+                        if COLUMN in (5, 6):
+                            self.Date = date
+                            self.Date = datetime.strptime(str(CitySheet.cell(row=CheckRow,
+                                                                             column=COLUMN).value),
+                                                          '%Y-%m-%d %H:%M:%S').date()
+                            self.AgeMessage.insert(INSERT, "{0} {1}\n".format(CitySheet.cell
+                                                                          (row=1, column=COLUMN).value, self.Date))
+                        else:
+                            self.AgeMessage.insert(INSERT, "{0} : {1}\n".format(CitySheet.cell
+                                                                          (row=1, column=COLUMN).value,
+                                                                          CitySheet.cell(row=CheckRow,
+                                                                                         column=COLUMN).value))
+                    self.AgeMessageScroll.config(command=self.AgeMessage.yview)
+                    self.AgeMessage.config(yscrollcommand=self.AgeMessageScroll.set)
+                    self.AgeMessage.config(state=DISABLED)
+                CheckRow += 1
 
 Reports = ReportsPage()
 Reports.mainloop()
