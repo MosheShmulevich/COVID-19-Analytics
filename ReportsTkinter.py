@@ -36,6 +36,9 @@ class ReportsPage(Tk):
         self.AgeTab = ttk.Frame(self.tab_control)
         self.tab_control.add(self.AgeTab, text="Find by Age")
 
+        self.OccupationTab = ttk.Frame(self.tab_control)
+        self.tab_control.add(self.OccupationTab, text="Find by Occupation")
+
         self.tab_control.pack(expan=1, fill="both")
 
     def add_widgets(self):
@@ -194,7 +197,7 @@ class ReportsPage(Tk):
         self.AgeChoose = Spinbox(self.AgeTab, from_=0, to=130, textvariable=self.AgeSelected)
         self.AgeChoose.grid(row=1, column=0)
 
-        self.AgeConfirm = ttk.Button(self.AgeTab, text="Confirm Selection", command=self.AgeReport)
+        self.AgeConfirm = ttk.Button(self.AgeTab, text="Confirm", command=self.AgeReport)
         self.AgeConfirm.grid(row=2, column=0)
 
         self.AgeMessage = Text(self.AgeTab, state=DISABLED, font=('Lato', 11))
@@ -205,6 +208,28 @@ class ReportsPage(Tk):
 
         self.ClearDataAge = Button(self.AgeTab, text="Clear Data", command=self.ClearAge)
         self.ClearDataAge.place(x=10, y=80)
+        ####################################
+
+        ######### Occupation Tab ###########
+        self.OccupationVar = StringVar()
+
+        self.OccupationLabel = Label(self.OccupationTab, text="Select Occupation", font=('Lato', 12))
+        self.OccupationLabel.grid(row=0, column=0)
+
+        self.OccupationCombo = ttk.Combobox(self.OccupationTab, width=18, textvariable=self.OccupationVar)
+        self.OccupationCombo.grid(row=0, column=1)
+        self.OccupationCombo['values'] = ("Employee", "Self-employed", "School Student", "College Student", "Pensioner")
+        self.OccupationCombo.set("select occupation...")
+
+        self.OccupationMessage = Text(self.OccupationTab, state=DISABLED, font=('Lato', 11))
+        self.OccupationMessage.place(x=450, y=20, width=450, height=540)
+
+        self.OccupationMessageScroll = ttk.Scrollbar(self.OccupationTab, orient="vertical",
+                                                     command=self.OccupationMessage.yview)
+        self.OccupationMessageScroll.place(x=900, y=20, height=540)
+
+        self.OccupationButton = ttk.Button(self.OccupationTab, text="Confirm", width=12, command=self.OccupationReport)
+        self.OccupationButton.grid(row=1, column=0)
         ####################################
 
     def ClearLocation(self):
@@ -298,8 +323,9 @@ class ReportsPage(Tk):
             if citySheet.cell(row=rw, column=4).value == id:
                 PatientRow = rw
         if PatientRow == None:
-            self.NoPatient = Label(self.IDTab, text="Patient with such id do not exist in the system!").place(x=500,
-                                                                                                              y=500)
+            self.NoPatient = Label(self.IDTab, text="Patient with such id do not exist in the system!")
+            self.NoPatient.place(x=500, y=500)
+            self.NoPatient.after(3000, self.NoPatient.destroy)
             return 1
 
         self.firstname = Label(self.IDTab, text=("Firstname:", citySheet.cell(row=PatientRow,
@@ -316,7 +342,8 @@ class ReportsPage(Tk):
         self.id = Label(self.IDTab, text=("ID:", citySheet.cell(row=PatientRow, column=4).value), font=('Lato', 11))
         self.id.place(x=240, y=180)
 
-        self.Occupation = Label(self.IDTab, text=("Occupation:", citySheet.cell(row=PatientRow, column=5).value), font=('Lato', 11))
+        self.Occupation = Label(self.IDTab, text=("Occupation:", citySheet.cell(row=PatientRow, column=5).value),
+                                font=('Lato', 11))
         self.Occupation.place(x=240, y=225)
 
         self.DateOfBirth = date
@@ -430,7 +457,7 @@ class ReportsPage(Tk):
     def AgeReport(self):
         if len(self.AgeMessage.get("1.0", "end-1c")) != 0:
             self.ClearAge()
-        CitiesList = Database.Covid19DB.sheetnames[1:-1:1]
+        CitiesList = Database.Covid19DB.sheetnames[1:]
         print("CitiesList:", CitiesList)
         today = date.today()
         for City in CitiesList:
@@ -452,16 +479,53 @@ class ReportsPage(Tk):
                                                                              column=COLUMN).value),
                                                           '%Y-%m-%d %H:%M:%S').date()
                             self.AgeMessage.insert(INSERT, "{0} {1}\n".format(CitySheet.cell
-                                                                          (row=1, column=COLUMN).value, self.Date))
+                                                                              (row=1, column=COLUMN).value, self.Date))
                         else:
                             self.AgeMessage.insert(INSERT, "{0} : {1}\n".format(CitySheet.cell
-                                                                          (row=1, column=COLUMN).value,
-                                                                          CitySheet.cell(row=CheckRow,
-                                                                                         column=COLUMN).value))
+                                                                                (row=1, column=COLUMN).value,
+                                                                                CitySheet.cell(row=CheckRow,
+                                                                                               column=COLUMN).value))
                     self.AgeMessageScroll.config(command=self.AgeMessage.yview)
                     self.AgeMessage.config(yscrollcommand=self.AgeMessageScroll.set)
                     self.AgeMessage.config(state=DISABLED)
                 CheckRow += 1
+
+    def ClearOccupation(self):
+        self.OccupationMessage.configure(state=NORMAL)
+        self.OccupationMessage.delete(1.0, END)
+        self.OccupationMessage.configure(state=DISABLED)
+
+    def OccupationReport(self):
+        if len(self.OccupationMessage.get("1.0", "end-1c")) != 0:
+            self.ClearOccupation()
+        CitiesList = Database.Covid19DB.sheetnames[1:]
+        print(CitiesList)
+        for City in CitiesList:
+            CitySheet = Database.Covid19DB[City]
+            RowCheck = 2
+            while CitySheet.cell(row=RowCheck, column=1).value is not None:
+                if CitySheet.cell(row=RowCheck, column=5).value == self.OccupationVar.get():
+                    print(CitySheet.cell(row=RowCheck, column=5).value, "=", self.OccupationVar.get())
+                    self.OccupationMessage.config(state=NORMAL)
+                    self.OccupationMessage.insert(INSERT, "-----------------------------------------\n")
+                    for COLUMN in range(1, 13):
+                        if COLUMN in (5, 11):
+                            continue
+                        elif COLUMN in (6, 7):
+                            self.Date = date
+                            self.Date = datetime.strptime(str(CitySheet.cell(row=RowCheck,
+                                                                             column=COLUMN).value),
+                                                          '%Y-%m-%d %H:%M:%S').date()
+                            self.OccupationMessage.insert(INSERT, "{0} {1}\n".format(CitySheet.cell
+                                                                              (row=1, column=COLUMN).value, self.Date))
+                        else:
+                            self.OccupationMessage.insert(INSERT, "{0} : {1}\n".format(CitySheet.cell
+                                                                                 (row=1, column=COLUMN).value,
+                                                                                 CitySheet.cell(row=RowCheck,
+                                                                                                column=COLUMN).value))
+                self.OccupationMessage.config(state=DISABLED)
+                RowCheck += 1
+
 
 Reports = ReportsPage()
 Reports.mainloop()

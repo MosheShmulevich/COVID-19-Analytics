@@ -48,7 +48,6 @@ class RegisterWindow(Tk):
         self.button = ttk.Button(self, text="Sign up", command=self.Register)
         self.button.pack()
 
-
     def Register(self):
 
         self.Message = Label(self, text=None)
@@ -61,19 +60,19 @@ class RegisterWindow(Tk):
         UsernameROW = 2
 
         while Database.userSheet.cell(row=UsernameROW, column=1).value is not None:
-            UsernameList += [Database.userSheet.cell(row=UsernameROW, column=1).value,]
-            EmailList += [Database.userSheet.cell(row=UsernameROW, column=3).value,]
+            UsernameList += [Database.userSheet.cell(row=UsernameROW, column=1).value, ]
+            EmailList += [Database.userSheet.cell(row=UsernameROW, column=3).value, ]
             UsernameROW += 1
         if self.username.get() in UsernameList:
             TryCounter += 1
             self.Message.configure(text="This user name already exist\nlog-in or choose a different "
-                                            "username")
+                                        "username")
             self.after(3000, self.Message.destroy)
             return -1
         if self.username.get() in EmailList:
             TryCounter += 1
             self.Message.configure(text="This email already exist\nlog-in or choose a different "
-                                                    "email")
+                                        "email")
             self.after(3000, self.Message.destroy)
             return -1
         if TryCounter >= 2:

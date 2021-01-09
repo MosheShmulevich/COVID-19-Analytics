@@ -1,10 +1,8 @@
-import Database
-from openpyxl import *
-
-import Database
+from datetime import *
 from tkinter import *
 from tkinter import ttk
-from datetime import *
+
+import Database
 
 
 class AddTestPage(Tk):
