@@ -48,7 +48,7 @@ class AddTestPage(Tk):
         self.WhereQuarntined = StringVar()
 
         self.Message = Label(self.Tab1, text="Fill the following information of the patient"
-                                             " to enter a patient into the database").grid(row=0, column=0,
+                                             " to enter a patient into the tests database").grid(row=0, column=0,
                                                                                            columnspan=5)
 
         self.city = Label(self.Tab1, text="City").grid(row=1, column=0)
@@ -124,6 +124,9 @@ class AddTestPage(Tk):
         self.QuarantineHospital = Radiobutton(self.Tab1, text="Hospital", value="Hospital",
                                               variable=self.WhereQuarntined, state=DISABLED)
         self.QuarantineHospital.grid(row=12, column=2, columnspan=5)
+
+        self.MovePositive = Button(self.Tab1, text="Move Positive Patients", command=self.PositiveToMainDB)
+        self.MovePositive.grid(row=14, column=1)
 
         self.exitButton = Button(self.Tab1, text="Exit", width=15, command=self.quit)
         self.exitButton.grid(row=14, column=0)
@@ -209,9 +212,28 @@ class AddTestPage(Tk):
 
     def PositiveToMainDB(self):
         CitiesList = Database.ResultDB.sheetnames
+        print(CitiesList)
         for City in CitiesList:
+            IdList = []
+            CheckRow = 2
+            while Database.Covid19DB[City].cell(row=CheckRow, column=4).value is not None:
+                IdList += [Database.Covid19DB[City].cell(row=CheckRow, column=4).value, ]
+                CheckRow += 1
+            print(IdList)
             for Row in range(2, 400):
                 if Database.ResultDB[City].cell(row=Row, column=7).value is 'Positive':
+                    if Database.ResultDB[City].cell(row=Row, column=4).value in IdList:
+                        print("Patient already in main database!")
+                        continue
+
+                    CheckRow = 2
+                    while Database.Covid19DB[City].cell(row=CheckRow, column=1).value is not None:
+                        CheckRow += 1
+                    for COLUMN in range(1, 11):
+                        Database.Covid19DB[City].cell(row=CheckRow, column=COLUMN).insert = \
+                            Database.ResultDB[City].cell(row=Row, column=COLUMN).value
+                    Database.Covid19DB.save('Database.xlsx')
+
 
 class ConfirmMessage(Tk):
     def __init__(self):
@@ -237,6 +259,7 @@ class ConfirmMessage(Tk):
 
     def ReturnNo(self):
         self.destroy()
+
 
 PatientAdd = AddTestPage()
 PatientAdd.mainloop()
