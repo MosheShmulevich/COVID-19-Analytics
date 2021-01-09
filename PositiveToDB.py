@@ -1,12 +1,15 @@
 import Database
+from openpyxl import *
+
+import Database
 from tkinter import *
 from tkinter import ttk
 from datetime import *
 
 
-class AddPage(Tk):
+class AddTestPage(Tk):
     def __init__(self):
-        super(AddPage, self).__init__()
+        super(AddTestPage, self).__init__()
         self.title("Add patient to the Database")
         self.geometry("550x320")
         self.resizable(width=False, height=False)
@@ -96,9 +99,9 @@ class AddPage(Tk):
         self.T_Year['values'] = tuple(range(2019, 2022))
 
         self.Status = Label(self.Tab1, text="What's the patient status?").grid(row=10, column=0)
-        self.status = ttk.Combobox(self.Tab1, width=8, textvariable=self.PatientStatus)
+        self.status = ttk.Combobox(self.Tab1, width=14, textvariable=self.PatientStatus)
         self.status.grid(row=10, column=1)
-        self.status['values'] = ("Active", "Recovered", "Dead", "Immunized")
+        self.status['values'] = ("Positive", "Negative", "Waiting for result")
 
         self.quarantine = Label(self.Tab1, text="Is the patient in quarantine?").grid(row=11, column=0, columnspan=1)
         self.Quarn = ttk.Combobox(self.Tab1, width=6, textvariable=self.Quarantined)
@@ -154,7 +157,7 @@ class AddPage(Tk):
                             cell.number_format = "DD-MM-YYYY"
                         elif column == 4:
                             cell.number_format = "0"
-                Database.Covid19DB.save('Database.xlsx')
+                Database.ResultDB.save('TestDatabase.xlsx')
 
             def SwitchTitle(column):  # function for adding to the xlsx table columns, titles
                 switcher = {
@@ -171,8 +174,8 @@ class AddPage(Tk):
                 }
                 return switcher
 
-            FormatCells(Database.Covid19DB.create_sheet(city))  # creating a new sheet with 'city' name
-            citySheet = Database.Covid19DB[city]  # implementing the 'city' sheet into a variable "city_sheet"
+            FormatCells(Database.ResultDB.create_sheet(city))  # creating a new sheet with 'city' name
+            citySheet = Database.ResultDB[city]  # implementing the 'city' sheet into a variable "city_sheet"
             for colmn in range(1, 11):  # adding to the xlsx table columns, titles
                 citySheet.cell(row=1, column=colmn).value = SwitchTitle(colmn)[colmn]
 
@@ -190,20 +193,25 @@ class AddPage(Tk):
             }
             return switcher
 
-        if self.City.get() not in Database.Covid19DB.sheetnames:  # if there is no 'city' sheet , calls a function to
-            # create one
-            CreateNewSheet(self.City.get())
-        citySheet = Database.Covid19DB[self.City.get()]
+        if self.City.get() not in Database.ResultDB.sheetnames:  # if there is no 'city' sheet , calls a function to
+            CreateNewSheet(self.City.get())  # create City sheet
+        citySheet = Database.ResultDB[self.City.get()]
         for row in range(2, 28):  # starts from row#2 because #1 is titles and end in #27(temporarily)
             for j in range(1, 2):  # start in column#1 to check if its empty
                 if citySheet.cell(row=row, column=j).value is None:
                     for col in range(1, 10):  # adding patient parameters into the empty row by columns
                         citySheet.cell(row=row, column=col).value = switch_input(col)[col]
-                    Database.Covid19DB.save(
-                        'Database.xlsx')  # after adding parameters,the system "autosaves" the xlsx file
+                    Database.ResultDB.save(
+                        'TestDatabase.xlsx')  # after adding parameters,the system "autosaves" the xlsx file
                     self.Success = Label(self.Tab1, text="Patient Added!").grid(row=13, column=0)
                     print("Patient added!")
                     return 0
+
+    def PositiveToMainDB(self):
+        CitiesList = Database.ResultDB.sheetnames
+        for City in CitiesList:
+            for Row in range(2, 400):
+                if Database.ResultDB[City].cell(row=Row, column=7).value is 'Positive':
 
 class ConfirmMessage(Tk):
     def __init__(self):
@@ -230,5 +238,5 @@ class ConfirmMessage(Tk):
     def ReturnNo(self):
         self.destroy()
 
-PatientAdd = AddPage()
+PatientAdd = AddTestPage()
 PatientAdd.mainloop()
