@@ -28,6 +28,7 @@ class MainPage(Tk):
 
     def make_report(self):
         Report = ReportsTkinter.ReportsPage()
+        Report.mainloop()
     def add_patient(self):
         Patient = AddPatientToDBTkinter.AddPage()
     def note(self):

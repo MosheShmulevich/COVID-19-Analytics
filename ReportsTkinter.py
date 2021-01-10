@@ -527,5 +527,5 @@ class ReportsPage(Tk):
                 RowCheck += 1
 
 
-Reports = ReportsPage()
-Reports.mainloop()
+# Reports = ReportsPage()
+# Reports.mainloop()

@@ -69,5 +69,5 @@ class NewWindow(Tk):
         self.destroy()
 
 
-Page = NotesPage()
-Page.mainloop()
+# Page = NotesPage()
+# Page.mainloop()
