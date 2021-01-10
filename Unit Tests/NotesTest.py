@@ -17,8 +17,8 @@ class TestNotesTkinter(unittest.TestCase):
         self.assertIsNotNone(NotesTkinter.Page.Message, "should be not None")
         self.assertIsNotNone(NotesTkinter.Page.Tab1, "should be not None")
         self.assertIsNotNone(NotesTkinter.Page.tab_control, "should be not None")
-        self.assertIsNone(NotesTkinter.Page.SubmitButton, "should be None")
-        self.assertIsNone(NotesTkinter.Page.SubmitButton, "should be not none")
+        self.assertIsNotNone(NotesTkinter.Page.SubmitButton, "should not be None")
+        self.assertIsNotNone(NotesTkinter.Page.SubmitButton, "should be not none")
 
     def test_create_tabs(self):
         self.assertIsNotNone(NotesTkinter.Page.tab_control, "should be not None")

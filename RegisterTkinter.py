@@ -92,6 +92,6 @@ class RegisterWindow(Tk):
                         self.Message.after(3000, self.Message.destroy)
                         return 1
 
-#
-# Register_Window = RegisterWindow()
-# Register_Window.mainloop()
+
+Register_Window = RegisterWindow()
+Register_Window.mainloop()

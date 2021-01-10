@@ -4,7 +4,6 @@ import Database
 from datetime import datetime, date
 import matplotlib.pyplot as plt
 
-
 class GraphGenerator(Tk):
     def __init__(self):
         super(GraphGenerator, self).__init__()

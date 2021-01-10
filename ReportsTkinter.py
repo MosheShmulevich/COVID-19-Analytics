@@ -436,8 +436,8 @@ class ReportsPage(Tk):
         for City in CitiesList:
             CitySheet = Database.Covid19DB[City]
             CheckRow = 2
-            while CitySheet.cell(row=CheckRow, column=5).value is not None:
-                Born = datetime.strptime(str(CitySheet.cell(row=CheckRow, column=5).value), '%Y-%m-%d %H:%M:%S').date()
+            while CitySheet.cell(row=CheckRow, column=6).value is not None:
+                Born = datetime.strptime(str(CitySheet.cell(row=CheckRow, column=6).value), '%Y-%m-%d %H:%M:%S').date()
                 Age = today.year - Born.year - (
                         (today.month, today.day) < (Born.month, Born.day))
                 print("Age:", Age)
