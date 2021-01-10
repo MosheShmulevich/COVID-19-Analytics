@@ -60,6 +60,6 @@ if(Sorting_option>=1 and Sorting_option<=6):
    x2=switch_input(Sorting_option)
     while (Sheet.cell(row='Row_Name', column='Column_Name').value)!=null:
         Row=Row+1
-        print(x2)
+        print(" ",x2)
 else:
  print("Wrong answer!")
