@@ -34,8 +34,7 @@ class NotesPage(Tk):
         self.MessageBox = Text(self.Tab1)
         self.MessageBox.place(x=2, y=110, width=400, height=100)
 
-        self.SubmitButton = Button(self.Tab1, text="Submit", command=self.SubmitCommand)
-        self.SubmitButton.place(x=420, y=184)
+        self.SubmitButton = Button(self.Tab1, text="Submit", command=self.SubmitCommand).place(x=420, y=184)
 
     def SubmitCommand(self):
         New_Window = NewWindow()
@@ -60,7 +59,7 @@ class NewWindow(Tk):
         self.YesButton.pack(side=RIGHT)
 
     def ReturnYes(self):
-        Page.ThanksMessage = Label(Page.Tab1, text="Thank you  for your note").place(x=200, y=10)
+        Page.ThanksMessage = Label(Page.Tab1, text="Thank you for your note").place(x=200, y=10)
         Page.NameBox.delete(0, END)
         Page.SubjectBox.delete(0, END)
         Page.MessageBox.delete("1.0", END)

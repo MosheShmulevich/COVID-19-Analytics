@@ -121,7 +121,7 @@ class PatientPage(Tk):
         ###################
         self.CityCombo = ttk.Combobox(self.MainTab, width=10, textvariable=self.City)
         self.CityCombo.place(x=600, y=15)
-        self.CityCombo['values'] = Database.Covid19DB.sheetnames[1:99]
+        self.CityCombo['values'] = Database.Covid19DB.sheetnames[1:]
 
         self.CitySelect = ttk.Button(self.MainTab, text="Select", width=8, command=self.get_Data)
         self.CitySelect.place(x=690, y=13)
