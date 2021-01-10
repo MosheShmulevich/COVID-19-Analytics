@@ -1,48 +1,45 @@
-import xlrd
+import openpyxl
 
 
-workbook = xlrd.open_workbook('tests_info.xls')  # for lab workers
-print("dear worker ,to trace and find mistakes we need you enter the following right after finishing a test ")
-print("enter the city you tested in ")
-city = input()
-worksheet = workbook.sheet_by_name(city)    # the sheets are by cities
-
-
-def find_row(i):
-    while i is not None:
-        i += 1
+def find_row():
+    i = sheet.max_row
     return i
 
 
-i = find_row(0)
-print("enter the number of the test :")
-num_of_test = input()
-worksheet.cell(row=i, column=0).value = num_of_test
+def info_input():
+    last_row = find_row()
+    print("enter the number of the test :")
+    num_of_test = input()
+    worksheet.cell(row=last_row, column=1).value = num_of_test
 
-print("enter your id:")
-work_id = input()
-worksheet.cell(row=i, column=1).value = work_id
+    print("enter your id:")
+    work_id = input()
+    worksheet.cell(row=last_row, column=2).value = work_id
 
-print("enter patient's id:")
-patient_id = input()
-worksheet.cell(row=i, column=2).value = patient_id
+    print("enter patient's id:")
+    patient_id = input()
+    worksheet.cell(row=last_row, column=3).value = patient_id
 
-print("enter the test time:")
-time = input()
-worksheet.cell(row=i, column=3).value = time
+    print("enter the test time:")
+    time = input()
+    worksheet.cell(row=last_row, column=4).value = time
 
-print("enter test date:")
-date = input()
-worksheet.cell(row=i, column=4).value = date
+    print("enter test date:")
+    date = input()
+    worksheet.cell(row=last_row, column=5).value = date
 
-print("enter the test result:")
-test_res = input()
-worksheet.cell(row=i, column=5).value = test_res
+    print("enter the test result:")
+    test_res = input()
+    worksheet.cell(row=last_row, column=6).value = test_res
 
-workbook.save()
+    workbook.save()
 
-
-print("thank you!")
-
+    print("thank you!")
 
 
+wb = openpyxl.load_workbook('tests_info.xlsx')  # for lab workers
+print("dear worker ,to trace and find mistakes we need you enter the following right after finishing a test ")
+print("enter the city you tested in: ")
+city = input()
+sheet = wb[city]    # the sheets are by cities
+info_input()

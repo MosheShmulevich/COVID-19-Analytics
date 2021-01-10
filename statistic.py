@@ -58,7 +58,7 @@ Sorting_option =input ("choose your searching option")
 if(Sorting_option>=1 and Sorting_option<=6):
    x=SwitchTitle(Sorting_option)
    x2=switch_input(Sorting_option)
-    while (Sheet.cell(row='Row_Name', column='Column_Name').value)!=null:
+    while (Sheet.cell(row='Row_Name', column='Column_Name').value)!=None:
         Row=Row+1
         print(" ",x2)
 else:
