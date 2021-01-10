@@ -29,6 +29,8 @@ class AddPage(Tk):
         self.Last_Name = StringVar()
         self.Sex = StringVar()
         self.ID = IntVar()
+        self.occupation = StringVar()
+        self.Email = StringVar()
 
         self.birth_Day = IntVar()
         self.birth_Month = IntVar()
@@ -55,6 +57,15 @@ class AddPage(Tk):
         self.first_name = ttk.Entry(self.Tab1, width=20, textvariable=self.First_Name).grid(row=2,
                                                                                             column=1)  # FirstName TextBox
 
+        self.OccupationLabel = Label(self.Tab1, text="Occupation").grid(row=2, column=2)
+        self.OccupationCombo = ttk.Combobox(self.Tab1, width=15, textvariable=self.occupation)
+        self.OccupationCombo.grid(row=2, column=3)
+        self.OccupationCombo['values'] = ("Employee", "Self-employed", "School Student", "College Student", "Pensioner")
+
+        self.EmailLabel = Label(self.Tab1, text="Email").grid(row=3, column=2)
+        self.EmailEntry = ttk.Entry(self.Tab1, width=20, textvariable=self.Email)
+        self.EmailEntry.grid(row=3, column=3)
+
         self.LastName = Label(self.Tab1, text="Last Name").grid(row=3, column=0)  # LastName Label
         self.last_name = ttk.Entry(self.Tab1, width=20, textvariable=self.Last_Name).grid(row=3,
                                                                                           column=1)  # LastName TextBox
@@ -77,7 +88,7 @@ class AddPage(Tk):
         self.B_Month.set("Month")
         self.B_Month['values'] = tuple(range(1, 13))
         self.B_Year = ttk.Combobox(self.Tab1, width=10, textvariable=self.birth_Year)
-        self.B_Year.grid(row=7, column=4)
+        self.B_Year.grid(row=7, column=3)
         self.B_Year.set("Year")
         self.B_Year['values'] = tuple(range(1900, 2021))
 
@@ -91,7 +102,7 @@ class AddPage(Tk):
         self.T_Month.set("Month")
         self.T_Month['values'] = tuple(range(1, 13))
         self.T_Year = ttk.Combobox(self.Tab1, width=10, textvariable=self.Test_Year)
-        self.T_Year.grid(row=9, column=4)
+        self.T_Year.grid(row=9, column=3)
         self.T_Year.set("Year")
         self.T_Year['values'] = tuple(range(2019, 2022))
 
@@ -108,7 +119,7 @@ class AddPage(Tk):
         self.confirm.grid(row=11, column=2)
 
         self.add_patient = Button(self.Tab1, text='Add Patient', width=15, command=self.Confirm)
-        self.add_patient.grid(row=13, column=4)
+        self.add_patient.grid(row=13, column=3)
 
         self.Location = Label(self.Tab1, text="Where is the patient quarantined?")
         self.Location.grid(row=12, column=0)
@@ -148,9 +159,9 @@ class AddPage(Tk):
         def CreateNewSheet(city):  # function for creating a new 'city' sheet in xlsx database
             def FormatCells(city_sheet):  # function for formatting the date and id cells according to the data
                 for row in range(2, 28):
-                    for column in range(4, 7):
+                    for column in range(4, 8):
                         cell = city_sheet.cell(row, column)
-                        if column == 5 or column == 6:
+                        if column == 6 or column == 7:
                             cell.number_format = "DD-MM-YYYY"
                         elif column == 4:
                             cell.number_format = "0"
@@ -162,18 +173,20 @@ class AddPage(Tk):
                     2: 'Lastname',
                     3: 'Sex',
                     4: 'ID',
-                    5: 'Birth date',
-                    6: 'Test date',
-                    7: 'Patient Status',
-                    8: 'Quarantined',
-                    9: 'Where quarantined',
-                    10: 'Notes'
+                    5: 'Occupation',
+                    6: 'Birth date',
+                    7: 'Test date',
+                    8: 'Patient Status',
+                    9: 'Quarantined',
+                    10: 'Where quarantined',
+                    11: 'Notes',
+                    12: 'Email'
                 }
                 return switcher
 
             FormatCells(Database.Covid19DB.create_sheet(city))  # creating a new sheet with 'city' name
             citySheet = Database.Covid19DB[city]  # implementing the 'city' sheet into a variable "city_sheet"
-            for colmn in range(1, 11):  # adding to the xlsx table columns, titles
+            for colmn in range(1, 13):  # adding to the xlsx table columns, titles
                 citySheet.cell(row=1, column=colmn).value = SwitchTitle(colmn)[colmn]
 
         def switch_input(k):  # function to choose patient's parameters
@@ -182,11 +195,13 @@ class AddPage(Tk):
                 2: self.Last_Name.get(),
                 3: self.Sex.get(),
                 4: self.ID.get(),
-                5: self.BirthDate,
-                6: self.TestDate,
-                7: self.PatientStatus.get(),
-                8: self.Quarantined.get(),
-                9: self.WhereQuarntined.get()
+                5: self.occupation.get(),
+                6: self.BirthDate,
+                7: self.TestDate,
+                8: self.PatientStatus.get(),
+                9: self.Quarantined.get(),
+                10: self.WhereQuarntined.get(),
+                12: self.Email.get()
             }
             return switcher
 
@@ -197,7 +212,9 @@ class AddPage(Tk):
         for row in range(2, 28):  # starts from row#2 because #1 is titles and end in #27(temporarily)
             for j in range(1, 2):  # start in column#1 to check if its empty
                 if citySheet.cell(row=row, column=j).value is None:
-                    for col in range(1, 10):  # adding patient parameters into the empty row by columns
+                    for col in range(1, 13):  # adding patient parameters into the empty row by columns
+                        if col == 11:
+                            continue
                         citySheet.cell(row=row, column=col).value = switch_input(col)[col]
                     Database.Covid19DB.save(
                         'Database.xlsx')  # after adding parameters,the system "autosaves" the xlsx file
