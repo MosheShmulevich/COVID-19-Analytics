@@ -264,18 +264,19 @@ class ReportsPage(Tk):
                 2: 'Lastname:',
                 3: 'Sex:',
                 4: 'ID:',
-                5: 'Birth date:',
-                6: 'Test date:',
-                7: 'Patient Status:',
-                8: 'Quarantined:'
+                5: 'Occupation:',
+                6: 'Birth date:',
+                7: 'Test date:',
+                8: 'Patient Status:',
+                9: 'Quarantined:'
             }
             return switcher[option]
 
         for ROW in range(1, 28):
-            if citySheet.cell(row=ROW, column=9).value == Location:
-                self.Data.insert(INSERT, "-------------------------------\n")  # seperator
-                for Column in range(1, 9):
-                    if Column in (5, 6):
+            if citySheet.cell(row=ROW, column=10).value == Location:
+                self.Data.insert(INSERT, "-------------------------------\n")  # separator
+                for Column in range(1, 10):
+                    if Column in (6, 7):
                         self.Date = date
                         self.Date = datetime.strptime(str(citySheet.cell(row=ROW,
                                                                          column=Column).value),
@@ -315,32 +316,35 @@ class ReportsPage(Tk):
         self.id = Label(self.IDTab, text=("ID:", citySheet.cell(row=PatientRow, column=4).value), font=('Lato', 11))
         self.id.place(x=240, y=180)
 
+        self.Occupation = Label(self.IDTab, text=("Occupation:", citySheet.cell(row=PatientRow, column=5).value), font=('Lato', 11))
+        self.Occupation.place(x=240, y=225)
+
         self.DateOfBirth = date
-        self.DateOfBirth = datetime.strptime(str(citySheet.cell(row=PatientRow, column=5).value),
+        self.DateOfBirth = datetime.strptime(str(citySheet.cell(row=PatientRow, column=6).value),
                                              '%Y-%m-%d %H:%M:%S').date()
         self.bDay = Label(self.IDTab, text=("Date of birth: {0}".format(self.DateOfBirth)), font=('Lato', 11))
-        self.bDay.place(x=240, y=225)
+        self.bDay.place(x=240, y=270)
 
         self.DateOfTest = date
-        self.DateOfTest = datetime.strptime(str(citySheet.cell(row=PatientRow, column=6).value),
+        self.DateOfTest = datetime.strptime(str(citySheet.cell(row=PatientRow, column=7).value),
                                             '%Y-%m-%d %H:%M:%S').date()
         self.testDay = Label(self.IDTab, text=("Test Date: {0}".format(self.DateOfTest)), font=('Lato', 11))
-        self.testDay.place(x=240, y=270)
+        self.testDay.place(x=240, y=315)
 
         self.status = Label(self.IDTab, text=("Patient Status: {0}".format(citySheet.cell(row=PatientRow,
-                                                                                          column=7).value)),
+                                                                                          column=8).value)),
                             font=('Lato', 11))
-        self.status.place(x=240, y=315)
+        self.status.place(x=240, y=360)
 
         self.Quaran = Label(self.IDTab, text=("In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
-                                                                                           column=8).value)),
+                                                                                           column=9).value)),
                             font=('Lato', 11))
-        self.Quaran.place(x=240, y=360)
+        self.Quaran.place(x=240, y=405)
 
         self.WhereQuaran = Label(self.IDTab, text=("Where In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
-                                                                                                      column=9).value)),
+                                                                                                      column=10).value)),
                                  font=('Lato', 11))
-        self.WhereQuaran.place(x=240, y=405)
+        self.WhereQuaran.place(x=240, y=450)
 
     def ReportByName(self):
         citySheet = Database.Covid19DB[self.SelectedCity.get()]
@@ -370,33 +374,37 @@ class ReportsPage(Tk):
         self.id = Label(self.NameTab, text=("ID:", citySheet.cell(row=PatientRow, column=4).value), font=('Lato', 11))
         self.id.place(x=240, y=180)
 
+        self.Occupation = Label(self.NameTab, text=("Occupation:", citySheet.cell(row=PatientRow, column=5).value),
+                                font=('Lato', 11))
+        self.Occupation.place(x=240, y=225)
+
         self.DateOfBirth = date
         self.DateOfBirth = datetime.strptime(str(citySheet.cell(row=PatientRow,
-                                                                column=5).value), '%Y-%m-%d %H:%M:%S').date()
+                                                                column=6).value), '%Y-%m-%d %H:%M:%S').date()
         self.bDay = Label(self.NameTab, text=("Date of birth: {0}".format(self.DateOfBirth)), font=('Lato', 11))
-        self.bDay.place(x=240, y=225)
+        self.bDay.place(x=240, y=270)
 
         self.DateOfTest = date
         self.DateOfTest = datetime.strptime(str(citySheet.cell(row=PatientRow,
-                                                               column=6).value), '%Y-%m-%d %H:%M:%S').date()
+                                                               column=7).value), '%Y-%m-%d %H:%M:%S').date()
         self.testDay = Label(self.NameTab, text=("Test Date: {0}".format(self.DateOfTest)), font=('Lato', 11))
-        self.testDay.place(x=240, y=270)
+        self.testDay.place(x=240, y=315)
 
         self.status = Label(self.NameTab, text=("Patient Status: {0}".format(citySheet.cell(row=PatientRow,
-                                                                                            column=7).value)),
+                                                                                            column=8).value)),
                             font=('Lato', 11))
-        self.status.place(x=240, y=315)
+        self.status.place(x=240, y=360)
 
         self.Quaran = Label(self.NameTab, text=("In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
-                                                                                             column=8).value)),
+                                                                                             column=9).value)),
                             font=('Lato', 11))
-        self.Quaran.place(x=240, y=360)
+        self.Quaran.place(x=240, y=405)
 
         self.WhereQuaran = Label(self.NameTab,
                                  text=("Where In Quarantine? : {0}".format(citySheet.cell(row=PatientRow,
-                                                                                          column=9).value)),
+                                                                                          column=10).value)),
                                  font=('Lato', 11))
-        self.WhereQuaran.place(x=240, y=405)
+        self.WhereQuaran.place(x=240, y=450)
 
     def CalcAge(self):
         self.AgeDict = {}
@@ -437,8 +445,8 @@ class ReportsPage(Tk):
                 if Age == self.AgeSelected.get():
                     self.AgeMessage.config(state=NORMAL)
                     self.AgeMessage.insert(INSERT, "-------------------------------------------\n")
-                    for COLUMN in range(1, 11):
-                        if COLUMN in (5, 6):
+                    for COLUMN in range(1, 12):
+                        if COLUMN in (6, 7):
                             self.Date = date
                             self.Date = datetime.strptime(str(CitySheet.cell(row=CheckRow,
                                                                              column=COLUMN).value),

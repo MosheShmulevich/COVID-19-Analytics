@@ -4,12 +4,11 @@ import Database
 import pygame
 
 
-
 class PatientPage(Tk):
     def __init__(self):
         super(PatientPage, self).__init__()
         self.title("Patient Information")
-        self.geometry("1000x600")
+        self.geometry("1000x670")
         self.resizable(width=False, height=False)
         self.MakeTabs()
         self.MakeLabels()
@@ -44,24 +43,30 @@ class PatientPage(Tk):
         self.ID_Label.place(x=50, y=180)
         self.ID_Label.configure(font=('Lato', 12, "bold"))
 
+        self.Occupation = Label(self.MainTab, text="Occupation:", font=('Lato', 12, 'bold'))
+        self.Occupation.place(x=50, y=235)
+
+        self.EmailLabel = Label(self.MainTab, text="Email:", font=('Lato', 12, 'bold'))
+        self.EmailLabel.place(x=500, y=510)
+
         self.bDay_Label = Label(self.MainTab, text="Date of birth:")
-        self.bDay_Label.place(x=50, y=235)
+        self.bDay_Label.place(x=50, y=290)
         self.bDay_Label.configure(font=('Lato', 12, "bold"))
 
         self.tDate_Label = Label(self.MainTab, text="Date of test:")
-        self.tDate_Label.place(x=50, y=290)
+        self.tDate_Label.place(x=50, y=345)
         self.tDate_Label.configure(font=('Lato', 12, "bold"))
 
         self.Status_Label = Label(self.MainTab, text="Patient's Status:")
-        self.Status_Label.place(x=50, y=345)
+        self.Status_Label.place(x=50, y=400)
         self.Status_Label.configure(font=('Lato', 12, "bold"))
 
         self.Quaran_Label = Label(self.MainTab, text="In quarantine?:")
-        self.Quaran_Label.place(x=50, y=400)
+        self.Quaran_Label.place(x=50, y=455)
         self.Quaran_Label.configure(font=('Lato', 12, "bold"))
 
         self.WhereQuaran_Label = Label(self.MainTab, text="Where in quarantine?:")
-        self.WhereQuaran_Label.place(x=50, y=455)
+        self.WhereQuaran_Label.place(x=50, y=510)
         self.WhereQuaran_Label.configure(font=('Lato', 12, "bold"))
 
         self.Notes_Label = Label(self.MainTab, text="Patient's notes")
@@ -106,7 +111,9 @@ class PatientPage(Tk):
 
         self.PostButton = ttk.Button(self.MessagesTab, width=16, text="Send message")
         self.PostButton.place(x=19, y=480)
+
     def MakeInterface(self):
+
         ######################## Main Tab ###########################
         #### Variables ####
         self.City = StringVar()
@@ -162,25 +169,33 @@ class PatientPage(Tk):
         self.id.place(x=50, y=205)
         self.id.configure(font=('Lato', 11))
 
-        self.bDay = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=5).value)
-        self.bDay.place(x=50, y=260)
+        self.Occupation = Label(self.MainTab, text=("Occupation:", citySheet.cell(row=self.Row, column=5).value),
+                                font=('Lato', 11))
+        self.Occupation.place(x=50, y=260)
+
+        self.bDay = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=6).value)
+        self.bDay.place(x=50, y=315)
         self.bDay.configure(font=('Lato', 11))
 
-        self.tDay = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=6).value)
-        self.tDay.place(x=50, y=315)
+        self.tDay = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=7).value)
+        self.tDay.place(x=50, y=370)
         self.tDay.configure(font=('Lato', 11))
 
-        self.status = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=7).value)
-        self.status.place(x=50, y=370)
+        self.status = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=8).value)
+        self.status.place(x=50, y=425)
         self.status.configure(font=('Lato', 11))
 
-        self.Quaran = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=8).value)
-        self.Quaran.place(x=50, y=425)
+        self.Quaran = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=9).value)
+        self.Quaran.place(x=50, y=480)
         self.Quaran.configure(font=('Lato', 11))
 
-        self.WhereQuaran = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=9).value)
-        self.WhereQuaran.place(x=50, y=480)
+        self.WhereQuaran = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=10).value)
+        self.WhereQuaran.place(x=50, y=535)
         self.WhereQuaran.configure(font=('Lato', 11))
+
+        self.Email = Label(self.MainTab, text=citySheet.cell(row=self.Row, column=12).value)
+        self.Email.place(x=500, y=535)
+        self.Email.configure(font=('Lato', 11))
 
     def edit(self):
         self.PatientNotes.configure(state=NORMAL)
@@ -188,6 +203,7 @@ class PatientPage(Tk):
     def save(self):
         self.PatientNotes.configure(state=DISABLED)
         Save = SaveConfirm()
+
 
 class SaveConfirm(Tk):
     def __init__(self):
@@ -199,7 +215,7 @@ class SaveConfirm(Tk):
 
     def Confirm(self):
         pygame.mixer.init()
-        pygame.mixer.music.load("ConfirmSoundFX.mp3")    # For fun
+        pygame.mixer.music.load("ConfirmSoundFX.mp3")  # For fun
         pygame.mixer.music.play()
         self.ConfirmMessage = Label(self, text="Are you sure about that?")
         self.ConfirmMessage.pack(side=TOP)
@@ -211,13 +227,14 @@ class SaveConfirm(Tk):
         self.YesButton.pack(side=RIGHT)
 
     def ReturnYes(self):
-        Database.Covid19DB[Page.City.get()].cell(row=Page.Row, column=10).value = Page.PatientNotes.get("1.0", END)
+        Database.Covid19DB[Page.City.get()].cell(row=Page.Row, column=11).value = Page.PatientNotes.get("1.0", END)
         Database.Covid19DB.save('Database.xlsx')
         self.destroy()
 
     def ReturnNo(self):
         Page.PatientNotes.configure(state=NORMAL)
         self.destroy()
+
 
 Page = PatientPage()
 Page.mainloop()

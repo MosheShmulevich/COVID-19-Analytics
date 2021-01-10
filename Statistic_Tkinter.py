@@ -1,6 +1,5 @@
 from tkinter import *
 from openpyxl import *
-from tkinter import ttk
 
 Patients_Details=load_workbook(filename='Patients_Details.xlsx',data_only=True)
 
@@ -25,18 +24,6 @@ class Statistic_Window(Tk):
         clear_button=Button(button_frame,text='Clear')
         clear_button.grid(row=0,column=0)
     ##############
-    def create_message_tab(self):
-        self.tab_control = ttk.Notebook(self)
-
-        self.create_message_tab = ttk.Frame(self.tab_control)
-        self.tab_control.add(self.create_message_tab, text="message_tab")
-
-        self.Data = Text(self.LocationTab, state=DISABLED, font=(12))
-        self.Data.place(x=500, y=20, width=600, height=500)
-
-        self.DataScroll = ttk.Scrollbar(self.LocationTab, orient="vertical", command=self.Data.yview)
-        self.DataScroll.place(x=1100, y=20, height=500)
-
     def close_text(self):
         if len(self.data.get("1.0","end-1c"))!=0:
             self.ClearLocation()
@@ -58,27 +45,27 @@ class Statistic_Window(Tk):
 
         if clicked.get()=='Firstname':
 
-            for N in range (1,Patients_Details['גיליון1'].cell(row=N,column=0).value):
+            for N in range (1,Patients_Details.cell_value(N,0)):
                 print(First_name)
 
         elif clicked.get()=='Last name':
-            for N in range (1,Patients_Details['גיליון1'].cell(row=N,column=1).value):
+            for N in range (1,Patients_Details.cell_value(N,1)):
                 print(Last_name)
 
         elif clicked.get() == 'ID':
-            for N in range (1,Patients_Details['גיליון1'].cell(row=N,column=2).value):
+            for N in range (1,Patients_Details.cell_value(N,2)):
                 print(ID)
 
         elif clicked.get() == 'Birth Date':
-            for N in range(1,Patients_Details['גיליון1'].cell(row=N,column=3).value):
+            for N in range(1,Patients_Details.cell_value(N, 3)):
                 print(Birth_Date)
 
         elif clicked.get() == 'Test Date':
-            for N in range (1,Patients_Details['גיליון1'].cell(row=N,column=4).value):
+            for N in range (1,Patients_Details.cell_value(N,4)):
                 print(Test_Date)
 
         elif clicked.get() == 'Patient Status':
-            for N in range (1,Patients_Details['גיליון1'].cell(row=N,column=5).value):
+            for N in range (1,Patients_Details.cell_value(N,5)):
                 print(Patient_Status)
 
     ################### visual integrity,what the consumer will meet when the program runs.
@@ -95,10 +82,10 @@ class Statistic_Window(Tk):
         clicked=StringVar()
         clicked.set(options[0])
 
-        drop=OptionMenu(Tk.self,clicked,*options,command=self.selected)
+        drop=OptionMenu(Tk.self,clicked,*options,command=Tk.selected)
         drop.pack(pady=20)
 
-        myButton= Button(Tk.self,text="Enter a statistical analysis:\n",command=self.selected)
+        myButton= Button(Tk.self,text="Enter a statistical analysis:\n",command=Tk.selected)
         myButton.pack()
 
 K=Statistic_Window()
